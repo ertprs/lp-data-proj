@@ -1,6 +1,44 @@
-<div class="login-form">
-
-    <form novalidate #loginForm="ngForm" (ngSubmit)="onSubmit()">
-        
+<div fxLayout="column" fxLayoutAlign="center center" class="login-form">
+  <div>
+    <h2>{{ "Login" | uppercase }}</h2>
+    <form
+      class="form"
+      novalidate
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Account Number:</mat-label>
+        <input matInput required formControlName="account" type="text" />
+        <mat-error *ngIf="formErrors.account">
+                {{ formErrors.account }}
+            </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Username:</mat-label>
+        <input matInput required formControlName="username" type="text" />
+        <mat-error *ngIf="formErrors.username">
+                {{ formErrors.username }}
+            </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password:</mat-label>
+        <input
+          matInput
+          #password
+          type="password"
+          required
+          formControlName="password"
+        />
+        <mat-error *ngIf="formErrors.password">
+                {{ formErrors.password }}
+            </mat-error>
+      </mat-form-field>
+      <button type="submit" mat-button [ngClass]="disabled ? 'disabledButton' : 'loginButton'" [disabled]="loginForm.invalid">Submit</button>
     </form>
+  </div>
+
+  <div class="logo">
+    <img src="/assets/liveperson-logo.png" />
+  </div>
 </div>

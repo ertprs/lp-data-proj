@@ -1,3 +1,12 @@
+$custom-active: #FFCC80;
+
+.active {
+    background: $custom-active;
+}
+
+img {
+    margin: 10px;
+}
 .nav {
     position: fixed;
     width: 100%;
