@@ -19,6 +19,7 @@ export class LoginService {
 
   public login(credentials: {account: number, username: string, password: string}): Observable<any> {
     const baseURL = `http://localhost:4200/`
+    console.log(baseURL+`api/login`)
     return this.http.post(baseURL+`api/login`,credentials)
     .pipe(catchError(this.processhttp.handleError))
   }
