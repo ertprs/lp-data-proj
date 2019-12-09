@@ -9,6 +9,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -34,7 +36,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     LoginComponent,
     HomeComponent,
     FooterComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -49,6 +51,8 @@ import { DashboardModule } from './dashboard/dashboard.module';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    DashboardModule,
+    FlexLayoutModule,
     DashboardModule
   ],
   providers: [LoginService, ProcessHttpmsgService],

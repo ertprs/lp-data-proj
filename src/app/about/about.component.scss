@@ -1,0 +1,51 @@
+$bg-color: #212121;
+
+.container {
+  height: 100vh;
+  background: $bg-color;
+}
+
+.container p {
+    color: white;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.container p {
+    font-family: 'Josefin Sans', sans-serif;
+    color: #c9c9c9;
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: 0px;
+    margin-bottom: 15px;
+  }
+  
+  .container a {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 14px;
+    text-decoration: none;
+    text-transform: uppercase;
+    background: transparent;
+    color: #c9c9c9;
+    border: 2px solid #c9c9c9;
+    display: inline-block;
+    padding: 10px 25px;
+    font-weight: 700;
+    -webkit-transition: 0.2s all;
+    transition: 0.2s all;
+  }
+
+  .container a:hover {
+    color: #ffab00;
+    border-color: #ffab00;
+  }
+  
+  @media only screen and (max-width: 480px) {
+    .container img {
+      height: 122px;
+      line-height: 122px;
+    }
+  }

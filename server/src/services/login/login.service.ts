@@ -10,8 +10,10 @@ export class LoginService {
   login(credentials: {
     username: string;
     password: string;
+    account: number;
   }): Promise<AxiosResponse> {
-    const url = `https://va.agentvep.liveperson.net/api/account/13026445/login?v=1.3`;
+      const { username, password, account } = credentials;
+    const url = `https://va.agentvep.liveperson.net/api/account/${account}/login?v=1.3`;
     let headers = {
       headers: {
         "Content-Type": "application/json",
@@ -19,8 +21,11 @@ export class LoginService {
       }
     };
     return this.http
-      .post(url, credentials, headers)
-      .pipe(map(response => response.data.bearer))
+      .post(url, {username, password}, headers)
+      .pipe(map(response => {
+        console.log(response.data.bearer)
+        return response.data.bearer
+      }))
       .toPromise()
       .catch(err => err);
   }

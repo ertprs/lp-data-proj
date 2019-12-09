@@ -1,12 +1,16 @@
-<div fxLayout="column" fxLayoutAlign="center center" class="login-form">
+<div class="login-form">
   <div>
     <h2>{{ "Login" | uppercase }}</h2>
+    <div *ngIf="validationErrorLogin">
+      {{ loginValidationMsg }}
+    </div>
     <form
       class="form"
       novalidate
       [formGroup]="loginForm"
       (ngSubmit)="onSubmit()"
     >
+    
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Account Number:</mat-label>
         <input matInput required formControlName="account" type="text" />

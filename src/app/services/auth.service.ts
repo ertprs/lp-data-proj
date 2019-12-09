@@ -8,7 +8,14 @@ export class AuthService {
   constructor() { }
 
   public isAuthenticated() {
-    console.log('hit authentication service')
-    return true;
+    console.log("checked whether it is authenticated")
+    let bearer = sessionStorage.getItem('bearer');
+    console.log(bearer)
+    if(bearer){
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 }

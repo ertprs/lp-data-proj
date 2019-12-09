@@ -8,8 +8,6 @@ a.nav-link:hover {
   border-bottom: 1px solid gray;
 }
 
-
-
 .cover {
   height: 100%;
   background-color: #212121;
@@ -22,18 +20,15 @@ a.nav-link:hover {
 }
 
 .cover button {
-  margin: 8px;
+  width: 150px;
+  margin: 20px 0px 20px 0px;
 }
 
-.logo {
-    display:flex;
-    justify-content: center;
-    padding: 100px 0px;
-//   border: 1px solid white;
-  width: 100%;
+@media only screen and (max-width: 480px) {
+
+  .cover p {
+    display: none;
+  }
 }
 
-.logo img {
-    width: 30%;
-    min-width: 250px;
-}
+
