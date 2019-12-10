@@ -9,17 +9,10 @@ import { GetDataService } from '../services/get-data.service';
 export class LayoutComponent implements OnInit {
 
   constructor(
-    private dataService: GetDataService
+    
   ) { }
 
   ngOnInit() {
-    this.dataService.getEngHistoryData()
-    .subscribe((data: any) => {
-      console.log(data);
-      return data;
-    },
-    err => `Observer received an error`)
-
   }
 
 }

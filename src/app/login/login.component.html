@@ -1,9 +1,9 @@
 <div class="login-form">
   <div>
     <h2>{{ "Login" | uppercase }}</h2>
-    <div *ngIf="validationErrorLogin">
-      {{ loginValidationMsg }}
-    </div>
+    <mat-error *ngIf="formErrors.invalid" style="color:red;">
+      {{ formErrors.invalid }}
+    </mat-error>
     <form
       class="form"
       novalidate
@@ -40,6 +40,7 @@
       </mat-form-field>
       <button type="submit" mat-button [ngClass]="disabled ? 'disabledButton' : 'loginButton'" [disabled]="loginForm.invalid">Submit</button>
     </form>
+    
   </div>
 
   <div class="logo">

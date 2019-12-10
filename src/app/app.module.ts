@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,7 +11,7 @@ import { MatPasswordStrengthModule } from '@angular-material-extensions/password
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
-
+import { DashboardModule } from './dashboard/dashboard.module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,7 +26,6 @@ import { FooterComponent } from './footer/footer.component';
 import { LoginService } from './services/login.service';
 import { ProcessHttpmsgService } from './services/process-httpmsg.service';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { DashboardModule } from './dashboard/dashboard.module';
 
 @NgModule({
   declarations: [
@@ -53,7 +53,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     HttpClientModule,
     DashboardModule,
     FlexLayoutModule,
-    DashboardModule
+    CommonModule
   ],
   providers: [LoginService, ProcessHttpmsgService],
   bootstrap: [AppComponent]
