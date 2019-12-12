@@ -4,6 +4,8 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { RouterModule } from "@angular/router";
 import { ChartsModule } from "ng2-charts";
+import { MatButtonToggleModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { LayoutComponent } from "./layout/layout.component";
 import { EngHistComponent } from "./layout/eng-hist/eng-hist.component";
@@ -24,7 +26,9 @@ import { AuthGuardService } from "../guards/auth-guard.service";
     FlexLayoutModule,
     RouterModule.forChild(dashboardRoutes),
     MatProgressSpinnerModule,
-    ChartsModule
+    ChartsModule,
+    MatButtonToggleModule,
+    BrowserAnimationsModule
   ],
   providers: [AuthGuardService]
 })

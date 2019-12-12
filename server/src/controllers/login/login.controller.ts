@@ -31,7 +31,7 @@ export class LoginController {
     //   console.log("accountId has been set in cache")
     // );
     console.log(body)
-    const bearer = await this.loginService.login(body);
+    const bearer: any = await this.loginService.login(body);
     console.log(`This is bearer ${JSON.stringify(bearer)}`);
     if(bearer.name == "Error") {
       throw new HttpException({

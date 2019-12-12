@@ -30,6 +30,7 @@ export class DataHistoryService {
     // end time for test - current time set to default but bring in from body as selected by user
     !to ? (to = Date.now()) : to;
     // let response = await this.cacheManager.mget(key1, key2,async (err, result) => { })
+    let sort = 'start:desc'
     const headers = generateHeaders(bearer);
     const payload = {
       interactive: true,
@@ -39,7 +40,7 @@ export class DataHistoryService {
         to
       }
     };
-    let url = `https://va.enghist.liveperson.net/interaction_history/api/account/${accountId}/interactions/search?`;
+    let url = `https://va.enghist.liveperson.net/interaction_history/api/account/${accountId}/interactions/search?sort=${sort}`;
     console.log("hit eng history service");
     const engHistData = await this.http
       .post(url, payload, { headers: headers })

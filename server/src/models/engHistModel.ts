@@ -8,7 +8,7 @@ export class EngagementHistoryBody {
     skillIds?: number[];
     agentIds?: number[];
     agentGroupIds?: number[];
-    duration: { from: number, to: number };
+    duration?: { from: number, to: number };
     keyword?: string;
     visitor?: string;
     channel?: any; // enum[-1(unknown), 1(web), 2(voice)]

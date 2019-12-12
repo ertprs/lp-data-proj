@@ -113,7 +113,7 @@ export class LoginComponent implements OnInit {
           username: "",
           password: ""
         });
-        this.router.navigate(["/dashboard"]);
+        this.router.navigate(["/dashboard/engagement-history"]);
       },
       error => {
         console.log(error);

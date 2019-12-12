@@ -1,15 +1,23 @@
-<div *ngIf="data">Some info for eng hist</div>
 
-<div fxFlex [hidden]="data">
+<div fxFlex [hidden]="barChartData">
     <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
 </div>
-<div style="display: block;">
-    <canvas baseChart width="400" height="400"
+<div fxLayout="column" fxLayoutAlign="space-evenly end">
+    <canvas baseChart width="700" height="500" min-height="300"
       [datasets]="barChartData"
       [labels]="barChartLabels"
       [options]="barChartOptions"
       [plugins]="barChartPlugins"
       [legend]="barChartLegend"
       [chartType]="barChartType">
+    </canvas>
+    <canvas baseChart width="700" height="500" min-height="300"
+      [datasets]="lineChartData"
+      [labels]="lineChartLabels"
+      [options]="lineChartOptions"
+      [colors]="lineChartColors"
+      [legend]="lineChartLegend"
+      [chartType]="lineChartType"
+      [plugins]="lineChartPlugins">
     </canvas>
   </div>

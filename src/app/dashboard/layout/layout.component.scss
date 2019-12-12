@@ -1,5 +1,15 @@
 .dashboard {
-    padding: 15%;
-    height: 100vh;
+    padding: 150px 50px 150px 50px;
+    // height: 100vh;
+    overflow-y: scroll;
     background-color: #222;
+}
+
+.data-viz-container {
+    padding: 7%;
+}
+
+.toggle-button {
+    width: 250px;
+    height: 100px;
 }

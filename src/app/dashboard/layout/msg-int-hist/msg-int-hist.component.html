@@ -1,9 +1,8 @@
-<div *ngIf="data">Some info for msg int</div>
-<div fxFlex [hidden]="data">
+<div fxFlex [hidden]="lineChartData">
     <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
 </div>
-<div style="display: block;">
-    <canvas baseChart width="400" height="400"
+<div class="data-viz-container" fxLayout="column" fxLayoutAlign="space-evenly end">
+    <canvas baseChart width="700" height="500" min-height="300"
       [datasets]="lineChartData"
       [labels]="lineChartLabels"
       [options]="lineChartOptions"
