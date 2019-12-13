@@ -114,6 +114,10 @@ export class EngHistComponent implements OnInit {
   constructor(
     private dataService: GetDataService
   ) {
+    
+   }
+
+  ngOnInit() {
     this.dataService.getEngHistoryData()
     .subscribe((response: any) => {
       console.log(response);
@@ -129,9 +133,6 @@ export class EngHistComponent implements OnInit {
       ];
     },
     err => `Observer received an error`)
-   }
-
-  ngOnInit() {
   }
 
   public agentAverageScores(data) {

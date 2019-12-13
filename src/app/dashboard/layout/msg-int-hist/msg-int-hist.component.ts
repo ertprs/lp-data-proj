@@ -1,42 +1,46 @@
 import { Component, OnInit } from "@angular/core";
-import { ChartDataSets, ChartOptions } from "chart.js";
-import { Color, Label } from "ng2-charts";
+import { ChartDataSets, ChartOptions, ChartType } from "chart.js";
+import { Color, Label, SingleDataSet } from "ng2-charts";
 import { GetDataService } from "../../services/get-data.service";
-
+import * as moment from "moment";
+import { preserveWhitespacesDefault } from '@angular/compiler';
+import { bindCallback } from 'rxjs';
 @Component({
   selector: "app-msg-int-hist",
   templateUrl: "./msg-int-hist.component.html",
   styleUrls: ["./msg-int-hist.component.scss"]
 })
 export class MsgIntHistComponent implements OnInit {
-
-  public lineChartData: ChartDataSets[] = [
-    { data: [], label: 'mcs'}
-  ];
-  public lineChartLabels: Label[] = [
-    // 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
-  ];
+  public lineChartData: ChartDataSets[] = [{ data: [], label: "mcs" }];
+  public lineChartLabels: Label[] = [];
   public lineChartOptions = {
     title: {
       display: true,
-      text: 'Chronology of MCS Scores'
-  },
+      text: "Chronology of MCS Scores"
+    },
+    legend: {
+      display: false,
+      align: 'start'
+    },
     responsive: true,
+    spanGaps: true,
+    elements: {
+      point: {
+        radius: 1
+      },
+      line: {
+        fill: true,
+        borderColor: 'black',
+        borderWidth: '3'
+      }
+    },
     scales: {
       xAxes: [
         {
           responsive: true,
-          type: "time",
-          time: {
-            unit: 'month',
-            unitStepSize: 3,
-            displayFormats: {
-              quarter: "MMM DD"
-            },
-          },
           scaleLabel: {
             display: true,
-            labelString: "Date"
+            labelString: "Number of Scores"
           },
           distribution: "series",
           ticks: {
@@ -59,12 +63,11 @@ export class MsgIntHistComponent implements OnInit {
     {
       borderColor: "black",
       backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-        "rgba(75, 192, 192, 0.2)",
-        "rgba(153, 102, 255, 0.2)",
-        "rgba(255, 159, 64, 0.2)"
+        "rgb(213, 72, 72)",
+        "rgb(233, 158, 82)",
+        "rgb(238, 238, 87)",
+        "rgb(51, 130, 208)",
+        "rgb(163, 114, 211)",
       ]
     },
     {
@@ -72,36 +75,89 @@ export class MsgIntHistComponent implements OnInit {
       backgroundColor: "blue"
     }
   ];
-  public lineChartLegend = true;
+  public lineChartLegend = {
+    display: false
+  };
   public lineChartType = "line";
   public lineChartPlugins = [];
 
-  constructor(private dataService: GetDataService) {
+  public polarAreaChartLabels = [];
+  public polarAreaChartData = [];
+  
+  public polarAreaLegend = true;
+  public polarAreaOptions = {
+    title: {
+      display: true,
+      text: "Chats by Skill"
+    },
+    elements: {
+      arc: {
+        backgroundColor: [
+                "rgba(255, 0, 0, 0.6)",
+              "rgba(0, 255,200, 0.6)",
+              "rgba(200, 0, 200, 0.6)",
+              "rgba(0, 255, 0, 0.6)"
+              ],
+              borderColor: "white"
+      }
+    },
+    responsive: true,
+    startAngle: -Math.PI / 4,
+    legend: {
+      position: "left"
+    },
+    animation: {
+      animateRotate: true
+    }
+  };
+
+  public polarAreaChartType: ChartType = "polarArea";
+
+  constructor(private dataService: GetDataService) {}
+
+  ngOnInit() {
     this.dataService.getMsgIntHistoryData().subscribe(
       (msgIntData: any) => {
         console.log(msgIntData);
-        this.lineChartData = [
-          {
-            data: this.parseData(msgIntData),
-            label: "mcs"
-          }
-        ];
+        let response = this.getMsgScoresByAgent(msgIntData);
+        this.lineChartData = response.lineResult;
+        this.lineChartLabels = [...Array(response.len).keys()].map(x =>
+          x.toString()
+        );
+        this.polarAreaChartLabels = Object.keys(response.polarResult);
+        this.polarAreaChartData = Object.values(response.polarResult).map(x =>
+          Number(x)
+        );
       },
       err => `Observer received an error`
     );
   }
 
-  ngOnInit() {}
-
-  public parseData(data) {
-    const result = data.conversationHistoryRecords.map(set => {
-      let date = new Date(set.info.startTime);
-      console.log(date);
-      return {
-        x: date,
-        y: set.info.mcs
-      };
+  public getMsgScoresByAgent(data) {
+    let lineResult = [];
+    let len = 0;
+    let polarResult = {};
+    data.conversationHistoryRecords.forEach(set => {
+      if (set.agentParticipants.length) {
+        let setData = {
+          data: [],
+          label:
+            set.agentParticipants[0].agentFullName
+        };
+        if (set.messageScores.length > len) {
+          len = set.messageScores.length;
+        }
+        set.messageScores.forEach(score => {
+          setData.data.push(score.mcs);
+        });
+        lineResult.push(setData);
+      }
+      if (polarResult[set.info.latestSkillName]) {
+        polarResult[set.info.latestSkillName]++;
+      } else {
+        polarResult[set.info.latestSkillName] = 1;
+      }
     });
-    return result;
+    return { lineResult, len, polarResult };
   }
 }

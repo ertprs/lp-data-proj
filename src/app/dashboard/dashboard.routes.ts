@@ -11,9 +11,7 @@ export const dashboardRoutes: Routes = [
     component: LayoutComponent,
     canActivate: [AuthGuardService],
     children: [
-      // { path: 'historical-data/:apiType', component: LayoutComponent },
-      // { path: 'engagement-history', component: LayoutComponent },
-      { path: '', redirectTo: '/dashboard/engagement-history', pathMatch: 'full' },
+      // { path: '', redirectTo: '/dashboard/engagement-history', pathMatch: 'full' },
       { path: '**', component: PageNotFoundComponent },
     ]
   }

@@ -1,18 +1,29 @@
 <div class="dashboard" fxLayout="column" fxLayoutAlign="space-between center">
-        <mat-button-toggle-group #group="matButtonToggleGroup">
-                <mat-button-toggle class="toggle-button" value="msg-interactions">
-                  <h4>Messaging Interactions History</h4>
-                </mat-button-toggle>
-                <mat-button-toggle class="toggle-button" value="engagement-history">
-                  <h4>Engagement History</h4>
-                </mat-button-toggle>
-        </mat-button-toggle-group>
-    <div class="data-viz-container" fxLayout="column" fxLayoutAlign="space-evenly end" style="width: 100%;">
-  <div *ngIf="apiType == 'engagement-history'">
-    <app-eng-hist></app-eng-hist>
+  <nav mat-tab-nav-bar fxLayout="row">
+        <span *ngFor="let link of navLinks" fxLayoutAlign="center center"><a
+      mat-tab-link
+      
+      [routerLink]="link.link"
+      routerLinkActive
+      #rla="routerLinkActive"
+      [active]="rla.isActive"
+    >
+    <mat-icon aria-hidden="false">{{ link.icon }}</mat-icon> {{ link.label }}
+    </a>
+</span>
+  </nav>
+
+  <div
+    class="data-viz-container"
+    fxLayout="column"
+    fxLayoutAlign="space-evenly center"
+    style="width: 100%;"
+  >
+    <div *ngIf="apiType == 'engagement-history'">
+      <app-eng-hist></app-eng-hist>
+    </div>
+    <div *ngIf="apiType == 'msg-interactions'">
+      <app-msg-int-hist></app-msg-int-hist>
+    </div>
   </div>
-  <div *ngIf="apiType == 'msg-interactions'">
-    <app-msg-int-hist></app-msg-int-hist>
-  </div>
-</div>
 </div>

@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { GetDataService } from '../services/get-data.service';
 import { Route, Router, ActivatedRoute, Params } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
+import { MatButtonToggleChange } from '@angular/material';
 
 @Component({
   selector: 'app-layout',
@@ -11,27 +12,38 @@ import { switchMap } from 'rxjs/operators';
 export class LayoutComponent implements OnInit {
   @Input()
   apiType: string;
+  navLinks: any[];
+  activeLinkIndex = -1;
 
   constructor (
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
-    // this.route.params
-    //   .pipe(
-    //     switchMap((params: Params) => { 
-    //       return params["apiType"]; 
-    //     })
-    //   )
-    //   .subscribe(
-    //     api => {
-    //       console.log(api)
-    //       this.apiType;
-    //     },
-    //     err => console.log(err)
-    //   );
+    this.navLinks = [
+        {
+            label: ' Messaging Interactions History',
+            link: '/dashboard/msg-interactions',
+            index: 0,
+            icon: 'pie_chart'
+        }, {
+            label: ' Engagement History',
+            link: '/dashboard/engagement-history',
+            index: 1,
+            icon: 'bar_chart'
+        }
+    ];
   }
 
   ngOnInit() {
     this.apiType = this.route.snapshot.params['apiType'];
+    this.router.events.subscribe((res) => {
+      this.activeLinkIndex = this.navLinks.find((tab) => {
+        if(tab.link === this.router.url) {
+          this.apiType = this.router.url.slice(11);
+          return tab;
+        }
+      }).index;
+  });
   }
 
 }

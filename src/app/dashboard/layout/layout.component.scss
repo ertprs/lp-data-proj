@@ -1,15 +1,28 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+$primary: mat-palette($mat-orange, 600);
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
 .dashboard {
     padding: 150px 50px 150px 50px;
-    // height: 100vh;
     overflow-y: scroll;
     background-color: #222;
 }
 
 .data-viz-container {
-    padding: 7%;
+    position: relative;
+    padding: 5%;
 }
 
-.toggle-button {
-    width: 250px;
-    height: 100px;
+.invisible {
+    display: none;
+}
+
+mat-icon {
+    color: white;
 }

@@ -1,9 +1,10 @@
 
-<div fxFlex [hidden]="barChartData">
-    <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
-</div>
-<div fxLayout="column" fxLayoutAlign="space-evenly end">
-    <canvas baseChart width="700" height="500" min-height="300"
+
+<div class="data-viz-container" fxLayout="column" fxLayoutAlign="space-evenly center">
+        <div fxFlex [hidden]="barChartData">
+                <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
+            </div>
+    <canvas baseChart width="1000" height="500" min-height="300" min-width="500"
       [datasets]="barChartData"
       [labels]="barChartLabels"
       [options]="barChartOptions"
@@ -11,7 +12,7 @@
       [legend]="barChartLegend"
       [chartType]="barChartType">
     </canvas>
-    <canvas baseChart width="700" height="500" min-height="300"
+    <canvas baseChart width="1000" height="500" min-height="300" min-width="500"
       [datasets]="lineChartData"
       [labels]="lineChartLabels"
       [options]="lineChartOptions"

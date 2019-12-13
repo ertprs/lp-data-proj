@@ -1,8 +1,9 @@
-<div fxFlex [hidden]="lineChartData">
-    <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
-</div>
-<div class="data-viz-container" fxLayout="column" fxLayoutAlign="space-evenly end">
-    <canvas baseChart width="700" height="500" min-height="300"
+
+<div class="data-viz-container" fxLayout="column" fxLayoutAlign="space-evenly center">
+        <div fxFlex [hidden]="lineChartData">
+                <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
+            </div>
+    <canvas baseChart width="1000" height="500" min-height="300" min-width="500"
       [datasets]="lineChartData"
       [labels]="lineChartLabels"
       [options]="lineChartOptions"
@@ -11,4 +12,11 @@
       [chartType]="lineChartType"
       [plugins]="lineChartPlugins">
     </canvas>
+    <canvas baseChart width="1000" height="500" min-height="300" min-width="500"
+        [data]="polarAreaChartData"
+        [labels]="polarAreaChartLabels"
+        [legend]="polarAreaLegend"
+        [chartType]="polarAreaChartType"
+        [options]="polarAreaOptions">
+      </canvas>
   </div>
