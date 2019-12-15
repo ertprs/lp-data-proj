@@ -1,8 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { GetDataService } from '../services/get-data.service';
 import { Route, Router, ActivatedRoute, Params } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
-import { MatButtonToggleChange } from '@angular/material';
 
 @Component({
   selector: 'app-layout',

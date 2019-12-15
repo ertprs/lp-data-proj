@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label, Color } from 'ng2-charts';
 import { GetDataService } from '../../services/get-data.service';
@@ -6,9 +6,24 @@ import { GetDataService } from '../../services/get-data.service';
 @Component({
   selector: 'app-eng-hist',
   templateUrl: './eng-hist.component.html',
-  styleUrls: ['./eng-hist.component.scss']
+  styleUrls: ['./eng-hist.component.scss', "../layout.component.scss"]
 })
 export class EngHistComponent implements OnInit {
+  data;
+  params = {
+    offset: 0,
+    limit: 50,
+    sort: 'start:desc'
+  }
+  payload = {
+    interactive: true,
+    ended: true,
+    start: {
+      from: Date.now() - 60000 * 60 * 24 * 30,
+      to: Date.now()
+    }
+  }
+
   public barChartOptions: ChartOptions = {
     title: {
       display: true,
@@ -118,10 +133,11 @@ export class EngHistComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.dataService.getEngHistoryData()
+    this.dataService.getEngHistoryData({ params: this.params, payload: this.payload})
     .subscribe((response: any) => {
       console.log(response);
       let res = this.agentAverageScores(response);
+      this.data = response;
       this.barChartData[0].data = res.mcsScores;
       this.barChartData[1].data = res.convos;
       this.barChartLabels = res.agents

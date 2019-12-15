@@ -1,16 +1,32 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { ChartDataSets, ChartOptions, ChartType } from "chart.js";
 import { Color, Label, SingleDataSet } from "ng2-charts";
 import { GetDataService } from "../../services/get-data.service";
 import * as moment from "moment";
-import { preserveWhitespacesDefault } from '@angular/compiler';
-import { bindCallback } from 'rxjs';
+import { preserveWhitespacesDefault } from "@angular/compiler";
+import { bindCallback } from "rxjs";
 @Component({
   selector: "app-msg-int-hist",
   templateUrl: "./msg-int-hist.component.html",
-  styleUrls: ["./msg-int-hist.component.scss"]
+  styleUrls: ["./msg-int-hist.component.scss", "../layout.component.scss"]
 })
 export class MsgIntHistComponent implements OnInit {
+  @Input()
+  data;
+  params = {
+    offset: 0,
+    limit: 50,
+    sort: 'start:desc'
+  }
+  payload = {
+    interactive: true,
+    ended: true,
+    start: {
+      from: Date.now() - 60000 * 60 * 24 * 30,
+      to: Date.now()
+    }
+  }
+
   public lineChartData: ChartDataSets[] = [{ data: [], label: "mcs" }];
   public lineChartLabels: Label[] = [];
   public lineChartOptions = {
@@ -20,7 +36,7 @@ export class MsgIntHistComponent implements OnInit {
     },
     legend: {
       display: false,
-      align: 'start'
+      align: "start"
     },
     responsive: true,
     spanGaps: true,
@@ -30,8 +46,8 @@ export class MsgIntHistComponent implements OnInit {
       },
       line: {
         fill: true,
-        borderColor: 'black',
-        borderWidth: '3'
+        borderColor: "black",
+        borderWidth: "3"
       }
     },
     scales: {
@@ -67,7 +83,7 @@ export class MsgIntHistComponent implements OnInit {
         "rgb(233, 158, 82)",
         "rgb(238, 238, 87)",
         "rgb(51, 130, 208)",
-        "rgb(163, 114, 211)",
+        "rgb(163, 114, 211)"
       ]
     },
     {
@@ -83,7 +99,7 @@ export class MsgIntHistComponent implements OnInit {
 
   public polarAreaChartLabels = [];
   public polarAreaChartData = [];
-  
+
   public polarAreaLegend = true;
   public polarAreaOptions = {
     title: {
@@ -93,12 +109,12 @@ export class MsgIntHistComponent implements OnInit {
     elements: {
       arc: {
         backgroundColor: [
-                "rgba(255, 0, 0, 0.6)",
-              "rgba(0, 255,200, 0.6)",
-              "rgba(200, 0, 200, 0.6)",
-              "rgba(0, 255, 0, 0.6)"
-              ],
-              borderColor: "white"
+          "rgba(255, 0, 0, 0.6)",
+          "rgba(0, 255,200, 0.6)",
+          "rgba(200, 0, 200, 0.6)",
+          "rgba(0, 255, 0, 0.6)"
+        ],
+        borderColor: "white"
       }
     },
     responsive: true,
@@ -116,10 +132,11 @@ export class MsgIntHistComponent implements OnInit {
   constructor(private dataService: GetDataService) {}
 
   ngOnInit() {
-    this.dataService.getMsgIntHistoryData().subscribe(
+    this.dataService.getMsgIntHistoryData({ params: this.params, payload: this.payload }).subscribe(
       (msgIntData: any) => {
         console.log(msgIntData);
         let response = this.getMsgScoresByAgent(msgIntData);
+        this.data = msgIntData;
         this.lineChartData = response.lineResult;
         this.lineChartLabels = [...Array(response.len).keys()].map(x =>
           x.toString()
@@ -141,8 +158,7 @@ export class MsgIntHistComponent implements OnInit {
       if (set.agentParticipants.length) {
         let setData = {
           data: [],
-          label:
-            set.agentParticipants[0].agentFullName
+          label: `${set.agentParticipants[0].agentFullName} at ${moment(new Date(set.info.startTime)).format('MM-DD-YYYY hh:MM a')}`
         };
         if (set.messageScores.length > len) {
           len = set.messageScores.length;

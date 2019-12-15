@@ -14,5 +14,10 @@ export const dashboardRoutes: Routes = [
       // { path: '', redirectTo: '/dashboard/engagement-history', pathMatch: 'full' },
       { path: '**', component: PageNotFoundComponent },
     ]
+  },
+  { 
+    path: 'dashboard', 
+    redirectTo: '/dashboard/engagement-history',
+    canActivate: [AuthGuardService]
   }
 ];

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -7,14 +7,23 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   @Input()
-  isHome: boolean = false;
+  loggedIn: boolean = false;
 
   constructor( 
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
-    console.log(this.route.data);
+    if(sessionStorage.bearer) {
+      this.loggedIn = true;
+    }
   }
 
+  logout(){
+    sessionStorage.setItem('bearer', '');
+    sessionStorage.setItem('accountId', '');
+    this.loggedIn = false;
+    this.router.navigate(['/home'])
+  }
 }

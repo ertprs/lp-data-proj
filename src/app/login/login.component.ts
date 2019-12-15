@@ -7,17 +7,14 @@ import {
 } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { LoginService } from "../services/login.service";
-import { Observable, interval, of } from "rxjs";
+// import { Observable, interval, of } from "rxjs";
 import { Router } from "@angular/router";
-import { map } from "rxjs/operators";
-import { resetFakeAsyncZone } from "@angular/core/testing";
+// import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"],
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent implements OnInit {
   @Input()
@@ -80,6 +77,7 @@ export class LoginComponent implements OnInit {
     for (const field in this.formErrors) {
       if (this.formErrors.hasOwnProperty(field)) {
         // clear previous error message (if any)
+        console.log("Form Error Own Properties: ", this.formErrors)
         this.formErrors[field] = "";
         const control = form.get(field);
         if (control && control.dirty && !control.valid) {

@@ -23,6 +23,12 @@ a {
     display: none;
 }
 
+.loading-spinner {
+    height: 80px;
+    width: 80px;
+}
+
 mat-icon {
     color: white;
+    padding: 10px;
 }

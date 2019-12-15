@@ -1,9 +1,9 @@
 $bg-primary: #FB8C00;
 
 .footer {
-    // position: absolute;
-    // bottom: 0;
+    position: sticky;
+    bottom: 0;
     width: 100%;
-    // padding: 10px 0px 10px 0px;
+    z-index: 100;
     background-color: $bg-primary;
 }

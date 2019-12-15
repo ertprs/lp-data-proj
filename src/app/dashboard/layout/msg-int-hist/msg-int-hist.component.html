@@ -1,22 +1,40 @@
-
-<div class="data-viz-container" fxLayout="column" fxLayoutAlign="space-evenly center">
-        <div fxFlex [hidden]="lineChartData">
-                <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
-            </div>
-    <canvas baseChart width="1000" height="500" min-height="300" min-width="500"
-      [datasets]="lineChartData"
-      [labels]="lineChartLabels"
-      [options]="lineChartOptions"
-      [colors]="lineChartColors"
-      [legend]="lineChartLegend"
-      [chartType]="lineChartType"
-      [plugins]="lineChartPlugins">
-    </canvas>
-    <canvas baseChart width="1000" height="500" min-height="300" min-width="500"
-        [data]="polarAreaChartData"
-        [labels]="polarAreaChartLabels"
-        [legend]="polarAreaLegend"
-        [chartType]="polarAreaChartType"
-        [options]="polarAreaOptions">
-      </canvas>
+<div
+  class="data-viz-container"
+  fxLayout="column"
+  fxLayoutAlign="space-evenly center"
+>
+  <div fxFlex fxLayoutAlign="center center" class="loading-spinner" *ngIf="!data">
+    <mat-spinner></mat-spinner>
   </div>
+  <canvas
+    baseChart
+    width="1000"
+    height="500"
+    min-height="300"
+    min-width="500"
+    [datasets]="lineChartData"
+    [labels]="lineChartLabels"
+    [options]="lineChartOptions"
+    [colors]="lineChartColors"
+    [legend]="lineChartLegend"
+    [chartType]="lineChartType"
+    [plugins]="lineChartPlugins"
+  >
+  </canvas>
+  <div fxFlex fxLayoutAlign="center center" class="loading-spinner" *ngIf="!data">
+      <mat-spinner></mat-spinner>
+    </div>
+  <canvas
+    baseChart
+    width="1000"
+    height="500"
+    min-height="300"
+    min-width="500"
+    [data]="polarAreaChartData"
+    [labels]="polarAreaChartLabels"
+    [legend]="polarAreaLegend"
+    [chartType]="polarAreaChartType"
+    [options]="polarAreaOptions"
+  >
+  </canvas>
+</div>
