@@ -1,7 +1,7 @@
 export class EngagementHistoryBody {
-    interactive: boolean;
-    ended: boolean;
-    start: { from: number, to: number };
+    interactive?: boolean;
+    ended?: boolean;
+    start?: { from: number, to: number };
     keyword_search_area?: {
         types: string[]
     };

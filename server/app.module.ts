@@ -7,6 +7,8 @@ import { LoginController } from './src/controllers/login/login.controller';
 import { LoginService } from './src/services/login/login.service';
 import { DataHistoryService } from './src/services/data-history/data-history.service';
 import { Promise } from 'es6-promise';
+import { ContactCenterService } from './src/services/contact-center/contact-center.service';
+import { ContactCenterController } from './src/controllers/contact-center/contact-center.controller';
 @Module({
   imports: [
     AngularUniversalModule.forRoot({
@@ -21,14 +23,15 @@ import { Promise } from 'es6-promise';
     }),
     HttpModule
   ],
-  controllers: [DataHistoryController, LoginController],
+  controllers: [DataHistoryController, LoginController, ContactCenterController],
   providers: [
     LoginService,
     {
       provide: APP_INTERCEPTOR,
       useClass: CacheInterceptor
     },
-    DataHistoryService
+    DataHistoryService,
+    ContactCenterService
   ]
 })
 export class ApplicationModule {}
