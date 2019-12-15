@@ -1,0 +1,39 @@
+.close {
+  color: white;
+}
+
+.drawer {
+  position: fixed;
+  z-index: 200;
+  padding: 75px 10px 75px 10px;
+  height: 100vh;
+  min-width: 25%;
+  border-right: 1px solid #ccc;
+  // background-color: rgb(35, 70, 94);
+  background-color: #222;
+}
+
+.keywordSearch mat-form-field {
+  width: 100%;
+}
+
+mat-expansion-panel {
+    margin: 5px;
+}
+
+mat-form-field {
+  margin: 5px;
+}
+
+mat-icon {
+  color: #222;
+  padding: 10px;
+}
+
+.note {
+  color: white;
+}
+
+.startTime mat-form-field {
+  width: 120px;
+}

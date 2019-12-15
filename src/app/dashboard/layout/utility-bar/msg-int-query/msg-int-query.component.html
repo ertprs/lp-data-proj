@@ -1,0 +1,53 @@
+<button mat-button (click)="drawer.open()">
+  <mat-icon aria-hidden="false">pie_chart</mat-icon>
+</button>
+
+<mat-drawer-container
+  [class.drawer-opened]="drawer.opened"
+  class="example-container"
+>
+  <mat-drawer #drawer class="drawer" mode="side" opened="false">
+        <div fxFlexLayout="row">
+
+    <mat-icon class="close" (click)="drawer.close()">close</mat-icon>
+    <h4 class="note">[ Chain multiple values in input with "," without spaces ]</h4>
+</div>
+    <mat-accordion>
+      <mat-expansion-panel class="startTime">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Start/End Times
+          </mat-panel-title>
+          <mat-panel-description>
+            Set Time Parameters
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div *ngFor="let each of time.sets">
+        <mat-label>{{ each }}</mat-label>
+        <mat-form-field>
+          <mat-select placeholder="Hour">
+            <mat-option *ngFor="let hour of time.hours" [value]="hour">
+              {{ hour }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select placeholder="Minute">
+            <mat-option *ngFor="let minute of time.minutes" [value]="minute">
+              {{ minute }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select placeholder="AM/PM">
+            <mat-option *ngFor="let period of time.periods" [value]="period">
+              {{ period }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+    </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    
+  </mat-drawer></mat-drawer-container
+>

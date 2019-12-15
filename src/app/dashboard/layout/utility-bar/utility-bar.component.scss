@@ -1,0 +1,14 @@
+$bg-primary: #FB8C00;
+
+.example-container {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+}
+
+.sidenav {
+    background: $bg-primary;
+    padding-top: 75px;
+}

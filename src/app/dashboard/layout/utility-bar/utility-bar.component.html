@@ -1,0 +1,17 @@
+<mat-sidenav-container class="example-container">
+  <mat-sidenav
+    fxFlexLayout="column"
+    fxLayoutAlign="space-between center"
+    class="sidenav"
+    opened
+    mode="side"
+  >
+    <div>
+      <app-eng-hist-query></app-eng-hist-query>
+      <app-msg-int-query></app-msg-int-query>
+    </div>
+    <button mat-button class="logout-button" (click)="logout()">
+      <mat-icon aria-hidden="false">power_settings_new</mat-icon>
+    </button>
+  </mat-sidenav>
+</mat-sidenav-container>
