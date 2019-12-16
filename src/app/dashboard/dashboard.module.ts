@@ -4,7 +4,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { RouterModule } from "@angular/router";
 import { ChartsModule } from "ng2-charts";
-import { MatButtonToggleModule } from '@angular/material';
+import { MatButtonToggleModule, MatNativeDateModule } from '@angular/material';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -55,6 +55,7 @@ import { AuthGuardService } from "../guards/auth-guard.service";
     MatInputModule,
     MatSelectModule,
     MatDatepickerModule,
+    MatNativeDateModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule

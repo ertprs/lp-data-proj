@@ -3,6 +3,7 @@ export const chained_values = {
       name: "Agents",
       description: "Select Specific Agents",
       class: "agents",
+      formControlName: "agentIds",
       inputPlaceholder: "Chain Multiple Agent Ids",
       selectPlaceholder: "Agents",
       values: []
@@ -11,6 +12,7 @@ export const chained_values = {
       name: "Skills",
       description: "Select Specific Skills",
       class: "skills",
+      formControlName: "skillIds",
       inputPlaceholder: "Chain Multiple Skill Ids",
       selectPlaceholder: "Skills",
       values: []
@@ -19,6 +21,7 @@ export const chained_values = {
       name: "Agent Groups",
       description: "Select Specific Agent Groups",
       class: "agentGroups",
+      formControlName: "agentGroupIds",
       inputPlaceholder: "Chain Multiple Groups",
       selectPlaceholder: "Agent Groups",
       values: []
@@ -27,6 +30,8 @@ export const chained_values = {
       name: "Keyword Search",
       description: "Keyword Lookup",
       class: "keywordSearch",
+      formGroupName: "keyword_search_area",
+      formControlName: "types",
       inputPlaceholder: "Chain Multiple Searches",
       selectPlaceholder: "Search Values",
       values: [

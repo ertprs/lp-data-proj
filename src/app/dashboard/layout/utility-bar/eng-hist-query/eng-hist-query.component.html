@@ -14,147 +14,184 @@
       </h4>
     </div>
     <form
-    class="form"
-    novalidate
-    [formGroup]="queryForm"
-    (ngSubmit)="onSubmit()"
-  >
-    <mat-accordion>
-      <mat-expansion-panel class="startTime">
-        <mat-expansion-panel-header class="space-between">
-          <mat-panel-title>
-            Start/End Times
-          </mat-panel-title>
-          <mat-panel-description>
-            Set Time Parameters
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <div  *ngFor="let each of time.sets">
-          <mat-label>{{ each }}</mat-label>
-          <mat-form-field>
-                <input matInput [matDatepicker]="picker" placeholder="Choose a date">
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
-          <mat-form-field>
-            <mat-select [(ngModel)]="startHour" placeholder="Hour">
-              <mat-option *ngFor="let hour of time.hours" [value]="hour">
-                {{ hour }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-select [(ngModel)]="startMinute" placeholder="Minute">
-              <mat-option *ngFor="let minute of time.minutes" [value]="minute">
-                {{ minute }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-select [(ngModel)]="startPeriod" placeholder="AM/PM">
-              <mat-option *ngFor="let period of time.periods" [value]="period">
-                {{ period }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </mat-expansion-panel>
-    </mat-accordion>
-
-    <mat-accordion *ngFor="let item of chainedValues | keyvalue: 0">
-      <mat-expansion-panel>
-        <mat-expansion-panel-header class="space-between">
-          <mat-panel-title>
-            {{ item.value.name }}
-          </mat-panel-title>
-          <mat-panel-description>
-            {{ item.value.description }}
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <mat-form-field>
-          <input matInput [placeholder]="item.value.inputPlaceholder" />
-        </mat-form-field>
-        <mat-form-field>
-          <mat-select
-            *ngIf="item.value.name == 'Keyword Search'"
-            [placeholder]="item.value.selectPlaceholder"
+      class="form"
+      novalidate
+      [formGroup]="queryForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <mat-accordion>
+        <mat-expansion-panel formGroupName="start" class="startTime">
+          <mat-expansion-panel-header class="space-between">
+            <mat-panel-title>
+              Start/End Times
+            </mat-panel-title>
+            <mat-panel-description>
+              Set Time Parameters
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div
+            *ngFor="let each of time | keyvalue: returnZero"
+            [formGroupName]="each.value.formGroupName"
           >
-            <mat-option
-              *ngFor="let lookup of item.value.values"
-              [value]="lookup.value"
-            >
-              {{ lookup }}
-            </mat-option>
-          </mat-select>
-          <mat-select *ngIf="item.value.name != 'Keyword Search'">
-            <mat-option
-              *ngFor="let lookup of item.value.values"
-              [value]="lookup.value"
-            >
-              {{ lookup.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </mat-expansion-panel>
-    </mat-accordion>
+            <mat-label>{{ each.value.name }}</mat-label>
+            <mat-form-field>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                placeholder="Choose a date"
+                [value]="date"
+                formControlName="date"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select formControlName="hour" placeholder="Hour">
+                <mat-option
+                  *ngFor="let hour of each.value.hours"
+                  [value]="hour"
+                >
+                  {{ hour }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select formControlName="minute" placeholder="Minute">
+                <mat-option
+                  *ngFor="let minute of each.value.minutes"
+                  [value]="minute"
+                >
+                  {{ minute }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select formControlName="period" placeholder="AM/PM">
+                <mat-option
+                  *ngFor="let period of each.value.periods"
+                  [value]="period"
+                >
+                  {{ period }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
 
-    <mat-accordion *ngFor="let item of dropDownSelect | keyvalue: 0">
-      <mat-expansion-panel>
-        <mat-expansion-panel-header class="space-between">
-          <mat-panel-title>
-            {{ item.value.name }}
-          </mat-panel-title>
-          <mat-panel-description>
-            {{ item.value.description }}
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <mat-form-field>
-          <mat-select [placeholder]="item.value.selectPlaceholder">
-            <mat-option
-              *ngFor="let lookup of item.value.values"
-              [value]="lookup.value"
-            >
-              {{ lookup.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </mat-expansion-panel>
-    </mat-accordion>
+      <mat-accordion *ngFor="let item of chainedValues | keyvalue: returnZero">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="space-between">
+            <mat-panel-title>
+              {{ item.value.name }}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ item.value.description }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div
+            *ngIf="item.value.name == 'Keyword Search'"
+            [formGroupName]="item.value.formGroupName"
+          >
+            <mat-form-field>
+              <input
+                matInput
+                [placeholder]="item.value.inputPlaceholder"
+                [formControlName]="item.value.formControlName"
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select [placeholder]="item.value.selectPlaceholder">
+                <mat-option
+                  *ngFor="let lookup of item.value.values"
+                  [value]="lookup.value"
+                >
+                  {{ lookup }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div *ngIf="item.value.name != 'Keyword Search'">
+            <mat-form-field>
+              <input
+                matInput
+                [placeholder]="item.value.inputPlaceholder"
+                [formControlName]="item.value.formControlName"
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select>
+                <mat-option
+                  *ngFor="let lookup of item.value.values"
+                  [value]="lookup.value"
+                >
+                  {{ lookup.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
 
-    <mat-accordion *ngFor="let item of singleInput | keyvalue: 0">
-      <mat-expansion-panel>
-        <mat-expansion-panel-header class="space-between">
-          <mat-panel-title>
-            {{ item.value.name }}
-          </mat-panel-title>
-          <mat-panel-description>
-            {{ item.value.description }}
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <mat-form-field>
-          <input matInput [placeholder]="item.value.inputPlaceholder" />
-        </mat-form-field>
-      </mat-expansion-panel>
-    </mat-accordion>
+      <mat-accordion *ngFor="let item of dropDownSelect | keyvalue: returnZero">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="space-between">
+            <mat-panel-title>
+              {{ item.value.name }}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ item.value.description }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field>
+            <mat-select [placeholder]="item.value.selectPlaceholder" [formControlName]="item.value.formControlName">
+              <mat-option
+                *ngFor="let lookup of item.value.values"
+                [value]="lookup.value"
+              >
+                {{ lookup.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-expansion-panel>
+      </mat-accordion>
 
-    <mat-accordion *ngFor="let item of doubleInput | keyvalue: 0">
-      <mat-expansion-panel>
-        <mat-expansion-panel-header class="space-between">
-          <mat-panel-title>
-            {{ item.value.name }}
-          </mat-panel-title>
-          <mat-panel-description>
-            {{ item.value.description }}
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <mat-form-field>
-          <input matInput [placeholder]="item.value.firstPlaceholder" />
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput [placeholder]="item.value.secondPlaceholder" />
-        </mat-form-field>
-      </mat-expansion-panel>
-    </mat-accordion> 
-    </form>
-    </mat-drawer
+      <mat-accordion *ngFor="let item of singleInput | keyvalue: returnZero">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="space-between">
+            <mat-panel-title>
+              {{ item.value.name }}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ item.value.description }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field>
+            <input matInput [placeholder]="item.value.inputPlaceholder" [formControlName]="item.value.formControlName"/>
+          </mat-form-field>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <mat-accordion *ngFor="let item of doubleInput | keyvalue: returnZero" [formGroupName]="item.value.formGroupName">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="space-between">
+            <mat-panel-title>
+              {{ item.value.name }}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ item.value.description }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field>
+            <input matInput [placeholder]="item.value.firstPlaceholder" formControlName="from"/>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput [placeholder]="item.value.secondPlaceholder" formControlName="to"/>
+          </mat-form-field>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </form> </mat-drawer
 ></mat-drawer-container>

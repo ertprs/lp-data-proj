@@ -20,22 +20,13 @@ export class EngHistQueryComponent implements OnInit {
   singleInput = single_input;
   doubleInput = double_input;
   queryForm: FormGroup;
-  startHour: string;
-  startMinute: string;
-  startPeriod: string;
 
   constructor(private dataService: GetDataService, private fb: FormBuilder) {
     this.createForm();
-    console.log(`${this.startHour}:${this.startMinute} ${this.startPeriod}`)
+    this.onValueChanged();
   }
 
   ngOnInit() {
-    this.time.hours = [...Array(12).keys()].map(x =>
-      x < 9 ? "0" + (x + 1).toString() : (x + 1).toString()
-    );
-    this.time.minutes = [...Array(60).keys()].map(x =>
-      x < 10 ? "0" + x.toString() : x.toString()
-    );
     this.dataService.getSkills().subscribe((skills: any) => {
       console.log(skills);
       this.chainedValues.skills.values = skills.map(skill => {
@@ -62,23 +53,50 @@ export class EngHistQueryComponent implements OnInit {
     this.queryForm = this.fb.group({
       interactive: true,
       ended: true,
-      start: this.fb.group({ from: "", to: "" }),
-      keyword_search_area: this.fb.group({
-        types: []
+      start: this.fb.group({ 
+        from: this.fb.group({
+          hour: "",
+          minute: "",
+          period: "",
+          date: ""
+        }), 
+        to: this.fb.group({
+          hour: "",
+          minute: "",
+          period: "",
+          date: ""
+        }) 
       }),
-      skillIds: [],
-      agentIds: [],
-      agentGroupIds: [],
+      keyword_search_area: this.fb.group({
+        types: ""
+      }),
+      skillIds: "",
+      agentIds: "",
+      agentGroupIds: "",
       duration: this.fb.group({ from: "", to: "" }),
       keyword: "",
       visitor: "",
-      channel: [], 
+      channel: "", 
       engagementId: "",
       alertedMcsValues: "",
       chatMCS: this.fb.group({ from: "", to: "" }),
       hasInteractiveCoBrowse: "",
       coBrowseDuration: this.fb.group({ from: "", to: "" }),
-      lineContentTypes: []
+      lineContentTypes: ""
     });
+    this.queryForm.valueChanges.subscribe(data => this.onValueChanged(data));
   }
+
+  onValueChanged(data?: any) {
+    let form = this.queryForm;
+    console.log(form.value);
+  }
+
+  onSubmit(){
+    console.log('submit')
+  }
+
+  returnZero() {
+    return 0;
+    }
 }

@@ -3,6 +3,7 @@ export const drop_down_select = {
       name: "Channels",
       description: "Engagement Channel Id",
       class: "channel",
+      formControlName: "channel",
       selectPlaceholder: "Select a Channel",
       values: [
         { name: "UNKNOWN(-1)", value: -1 },
@@ -14,6 +15,7 @@ export const drop_down_select = {
       name: "Alerted MCS Values",
       description: "Alerted MCS of the Chat",
       class: "alertedMCS",
+      formControlName: "alertedMcsValues",
       selectPlaceholder: "Select an MCS Value",
       values: [
         { name: "-1", value: -1 },
@@ -25,6 +27,7 @@ export const drop_down_select = {
       name: "Line Content",
       description: "Type of Chat Line",
       class: "lineType",
+      formControlName: "lineContentTypes",
       selectPlaceholder: "Select a Type",
       values: [
         { name: "Rich Content", value: "RICH_CONTENT"}
