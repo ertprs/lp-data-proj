@@ -14,11 +14,49 @@
       </h4>
     </div>
     <form
+      fxLayoutGap="10"
       class="form"
       novalidate
       [formGroup]="queryForm"
       (ngSubmit)="onSubmit()"
     >
+      <mat-accordion>
+        <mat-expansion-panel formGroupName="paramForm">
+          <mat-expansion-panel-header class="space-between">
+            <mat-panel-title>
+              Parameters
+            </mat-panel-title>
+            <mat-panel-description>
+              Set Data Size and Order Parameters
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field>
+            <input
+              matInput
+              [placeholder]="params.limit.inputPlaceholder"
+              [formControlName]="params.limit.formControlName"
+            />
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              [placeholder]="params.offset.inputPlaceholder"
+              [formControlName]="params.offset.formControlName"
+            />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select [formControlName]="params.sort.formControlName" [placeholder]="params.sort.selectPlaceholder">
+              <mat-option
+                *ngFor="let lookup of params.sort.values"
+                [value]="lookup.value"
+              >
+                {{ lookup.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-expansion-panel>
+      </mat-accordion>
+
       <mat-accordion fxLayoutGap="10">
         <mat-expansion-panel formGroupName="start" class="startTime">
           <mat-expansion-panel-header class="space-between">
@@ -147,7 +185,10 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
           <mat-form-field>
-            <mat-select [placeholder]="item.value.selectPlaceholder" [formControlName]="item.value.formControlName">
+            <mat-select
+              [placeholder]="item.value.selectPlaceholder"
+              [formControlName]="item.value.formControlName"
+            >
               <mat-option
                 *ngFor="let lookup of item.value.values"
                 [value]="lookup.value"
@@ -170,12 +211,19 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
           <mat-form-field>
-            <input matInput [placeholder]="item.value.inputPlaceholder" [formControlName]="item.value.formControlName"/>
+            <input
+              matInput
+              [placeholder]="item.value.inputPlaceholder"
+              [formControlName]="item.value.formControlName"
+            />
           </mat-form-field>
         </mat-expansion-panel>
       </mat-accordion>
 
-      <mat-accordion *ngFor="let item of doubleInput | keyvalue: returnZero" [formGroupName]="item.value.formGroupName">
+      <mat-accordion
+        *ngFor="let item of doubleInput | keyvalue: returnZero"
+        [formGroupName]="item.value.formGroupName"
+      >
         <mat-expansion-panel>
           <mat-expansion-panel-header class="space-between">
             <mat-panel-title>
@@ -186,19 +234,43 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
           <mat-form-field>
-            <input matInput [placeholder]="item.value.firstPlaceholder" formControlName="from"/>
+            <input
+              matInput
+              [placeholder]="item.value.firstPlaceholder"
+              formControlName="from"
+            />
           </mat-form-field>
           <mat-form-field>
-            <input matInput [placeholder]="item.value.secondPlaceholder" formControlName="to"/>
+            <input
+              matInput
+              [placeholder]="item.value.secondPlaceholder"
+              formControlName="to"
+            />
           </mat-form-field>
         </mat-expansion-panel>
       </mat-accordion>
-      <div fxLayout="row" fxLayoutAlign="end center"><button
-        class="search-button"
-        type="submit"
-        mat-button
-      >
-        Search
-      </button></div>
-    </form> </mat-drawer
-></mat-drawer-container>
+
+      <mat-accordion formControlName="hasInteractiveCoBrowse">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="space-between">
+            <mat-panel-title>
+              Interactive Co-Browse
+            </mat-panel-title>
+            <mat-panel-description>
+              True or False
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-radio-group aria-label="Select an option">
+            <mat-radio-button value="true">True</mat-radio-button>
+            <mat-radio-button value="false">False</mat-radio-button>
+          </mat-radio-group>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <div fxLayout="row" fxLayoutAlign="end center">
+        <button class="search-button" type="submit" mat-button>
+          Search
+        </button>
+      </div>
+    </form>
+  </mat-drawer></mat-drawer-container
+>

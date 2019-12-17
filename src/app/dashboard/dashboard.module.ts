@@ -17,6 +17,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatRadioModule } from '@angular/material/radio';
 
 import { LayoutComponent } from "./layout/layout.component";
 import { EngHistComponent } from "./layout/eng-hist/eng-hist.component";
@@ -56,6 +57,7 @@ import { AuthGuardService } from "../guards/auth-guard.service";
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatRadioModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule

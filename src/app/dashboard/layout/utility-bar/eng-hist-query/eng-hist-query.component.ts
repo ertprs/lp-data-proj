@@ -6,6 +6,7 @@ import { chained_values } from "../shared/chained-values";
 import { time_start } from "../shared/time";
 import { single_input } from "../shared/single-input";
 import { double_input } from "../shared/double-input";
+import { params } from '../shared/params';
 
 @Component({
   selector: "app-eng-hist-query",
@@ -19,10 +20,13 @@ export class EngHistQueryComponent implements OnInit {
   dropDownSelect = drop_down_select;
   singleInput = single_input;
   doubleInput = double_input;
+  params = params;
   queryForm: FormGroup;
+  paramForm: FormGroup;
 
   constructor(private dataService: GetDataService, private fb: FormBuilder) {
-    this.createForm();
+    this.createParamForm();
+    this.createQueryForm();
     this.onValueChanged();
   }
 
@@ -49,7 +53,17 @@ export class EngHistQueryComponent implements OnInit {
     });
   }
 
-  createForm() {
+  createParamForm() {
+    this.paramForm = this.fb.group({
+      limit: 50,
+      offset: 0,
+      sort: "start:desc"
+    })
+
+    this.paramForm.valueChanges.subscribe(data => this.onValueChanged(data));
+  }
+
+  createQueryForm() {
     this.queryForm = this.fb.group({
       interactive: true,
       ended: true,
@@ -94,7 +108,7 @@ export class EngHistQueryComponent implements OnInit {
 
   onSubmit() {
     console.log("submit");
-    let form = this.serializeForm(this.queryForm.value);
+    let form = this.serializeQueryForm(this.queryForm.value);
     console.log(`AFTER OPERATION ON FORM:`, form);
     let setParams = { value: { limit: 50, offset: 0, sort: "start:desc" } };
     this.dataService
@@ -103,12 +117,6 @@ export class EngHistQueryComponent implements OnInit {
         (results: any) => {
           console.log(results);
 
-          // this.queryForm.reset({
-          //   account: "",
-          //   username: "",
-          //   password: ""
-          // });
-          // this.router.navigate(["/dashboard/engagement-history"]);
         },
         error => {
           console.log(error);
@@ -121,7 +129,7 @@ export class EngHistQueryComponent implements OnInit {
     return 0;
   }
 
-  serializeForm(formValue) {
+  serializeQueryForm(formValue) {
     let serialized = {}
     for (let key in formValue) {
       let value = formValue[key];
@@ -135,10 +143,10 @@ export class EngHistQueryComponent implements OnInit {
             } else {
               serialized[key] = {
                 from: new Date(
-                `${JSON.stringify(value.from.date).substring(0, 11)} ${value.from.hour ? value.from.hour + value.from.minute : ""} ${value.from.period}`
+                `${JSON.stringify(value.from.date).substring(0, 11)} ${value.from.hour ? value.from.hour + ":" + value.from.minute + " " + value.from.period : ""}`
               ).valueOf(),
               to: new Date(
-                `${JSON.stringify(value.to.date).substring(0, 11)} ${value.to.hour ? value.to.hour + value.to.minute : ""} ${value.to.period}`
+                `${JSON.stringify(value.to.date).substring(0, 11)} ${value.to.hour ? value.to.hour + ":" + value.to.minute + " " + value.from.period : ""}`
               ).valueOf()
               };
             }
@@ -165,12 +173,13 @@ export class EngHistQueryComponent implements OnInit {
         key == "alertedMcsValues"
       ) {
         if (value) {
-          
-          // lineContentTypes, alertedMcsValues
-          serialized[key] = value.split(/,\s*/) ;
           // agentIds, agentGroupIds, skillIds
           if (key != "lineContentTypes" && key != "alertedMcsValues") {
-            serialized[key] = serialized[key].map(x => Number(x));
+            serialized[key] = value.split(/,\s*/).map(x => Number(x));
+          }
+          else {
+            // lineContentTypes, alertedMcsValues
+            serialized[key] = Array(value);
           }
         }
       } 
