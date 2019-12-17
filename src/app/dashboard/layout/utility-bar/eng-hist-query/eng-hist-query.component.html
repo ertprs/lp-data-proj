@@ -19,7 +19,7 @@
       [formGroup]="queryForm"
       (ngSubmit)="onSubmit()"
     >
-      <mat-accordion>
+      <mat-accordion fxLayoutGap="10">
         <mat-expansion-panel formGroupName="start" class="startTime">
           <mat-expansion-panel-header class="space-between">
             <mat-panel-title>
@@ -193,5 +193,12 @@
           </mat-form-field>
         </mat-expansion-panel>
       </mat-accordion>
+      <div fxLayout="row" fxLayoutAlign="end center"><button
+        class="search-button"
+        type="submit"
+        mat-button
+      >
+        Search
+      </button></div>
     </form> </mat-drawer
 ></mat-drawer-container>

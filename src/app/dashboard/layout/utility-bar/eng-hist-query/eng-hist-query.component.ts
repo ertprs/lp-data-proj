@@ -53,19 +53,19 @@ export class EngHistQueryComponent implements OnInit {
     this.queryForm = this.fb.group({
       interactive: true,
       ended: true,
-      start: this.fb.group({ 
+      start: this.fb.group({
         from: this.fb.group({
           hour: "",
           minute: "",
           period: "",
           date: ""
-        }), 
+        }),
         to: this.fb.group({
           hour: "",
           minute: "",
           period: "",
           date: ""
-        }) 
+        })
       }),
       keyword_search_area: this.fb.group({
         types: ""
@@ -76,7 +76,7 @@ export class EngHistQueryComponent implements OnInit {
       duration: this.fb.group({ from: "", to: "" }),
       keyword: "",
       visitor: "",
-      channel: "", 
+      channel: "",
       engagementId: "",
       alertedMcsValues: "",
       chatMCS: this.fb.group({ from: "", to: "" }),
@@ -92,11 +92,92 @@ export class EngHistQueryComponent implements OnInit {
     console.log(form.value);
   }
 
-  onSubmit(){
-    console.log('submit')
+  onSubmit() {
+    console.log("submit");
+    let form = this.serializeForm(this.queryForm.value);
+    console.log(`AFTER OPERATION ON FORM:`, form);
+    let setParams = { value: { limit: 50, offset: 0, sort: "start:desc" } };
+    this.dataService
+      .getEngHistoryData({ params: setParams.value, payload: form })
+      .subscribe(
+        (results: any) => {
+          console.log(results);
+
+          // this.queryForm.reset({
+          //   account: "",
+          //   username: "",
+          //   password: ""
+          // });
+          // this.router.navigate(["/dashboard/engagement-history"]);
+        },
+        error => {
+          console.log(error);
+          // this.onValueChanged("invalid");
+        }
+      );
   }
 
   returnZero() {
     return 0;
+  }
+
+  serializeForm(formValue) {
+    let serialized = {}
+    for (let key in formValue) {
+      let value = formValue[key];
+      // start, duration, chatMCS, coBrowseDuration, keyword_search_area
+      if (typeof value == "object") {
+        if (value.from) {
+          // start
+          if (typeof value.from == "object") {
+            if (!value.from.date || !value.to.date) {
+              serialized[key] = { from: Date.now() - 60000 * 60 * 24 * 30, to: Date.now() };
+            } else {
+              serialized[key] = {
+                from: new Date(
+                `${JSON.stringify(value.from.date).substring(0, 11)} ${value.from.hour ? value.from.hour + value.from.minute : ""} ${value.from.period}`
+              ).valueOf(),
+              to: new Date(
+                `${JSON.stringify(value.to.date).substring(0, 11)} ${value.to.hour ? value.to.hour + value.to.minute : ""} ${value.to.period}`
+              ).valueOf()
+              };
+            }
+            console.log(serialized[key])
+          }
+          // duration, chatMCS, coBrowseDuration
+          if (typeof value.from != "object") {
+            if (value.from && value.to) {
+              serialized[key] = { from: Number(value.from), to: Number(value.to)};
+            }
+          }
+        }
+        // keyword_search_area
+        else if (key === "keyword_search_area") {
+          if(value.type) {
+            serialized[key] = { type: value.type.split(/,\s*/) }
+          }
+        }
+      } else if (
+        key == "agentIds" ||
+        key == "agentGroupIds" ||
+        key == "skillIds" ||
+        key == "lineContentTypes" ||
+        key == "alertedMcsValues"
+      ) {
+        if (value) {
+          
+          // lineContentTypes, alertedMcsValues
+          serialized[key] = value.split(/,\s*/) ;
+          // agentIds, agentGroupIds, skillIds
+          if (key != "lineContentTypes" && key != "alertedMcsValues") {
+            serialized[key] = serialized[key].map(x => Number(x));
+          }
+        }
+      } 
+      else if(typeof value == "boolean") {
+        serialized[key] = value;
+      }
     }
+    return serialized;
+  }
 }

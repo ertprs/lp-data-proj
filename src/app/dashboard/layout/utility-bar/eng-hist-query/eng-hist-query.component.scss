@@ -2,6 +2,12 @@
   color: white;
 }
 
+.search-button {
+    color: #222;
+    background: white;
+    margin: 5px;
+}
+
 .drawer {
   position: fixed;
   z-index: 200;
@@ -19,7 +25,6 @@
 
 mat-expansion-panel {
     margin: 5px;
-    // color: white;
 }
 
 mat-form-field {
@@ -33,6 +38,7 @@ mat-icon {
 
 .note {
   color: white;
+  margin: 5px;
 }
 
 .startTime mat-form-field {

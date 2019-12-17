@@ -24,3 +24,7 @@ body {
 .mat-content > mat-panel-title, .mat-content > mat-panel-description {
   flex: 0 0 auto;
 }
+
+.mat-expansion-panel {
+    flex-basis: 0 !important;
+}
