@@ -1,4 +1,4 @@
-export const drop_down_select = {
+export const eh_drop_down_select = {
     "channel": {
       name: "Channels",
       description: "Engagement Channel Id",
@@ -11,18 +11,6 @@ export const drop_down_select = {
         { name: "VOICE(2)", value: 2 }
       ]
     },
-    "alertedMcsValues": {
-      name: "Alerted MCS Values",
-      description: "Alerted MCS of the Chat",
-      class: "alertedMCS",
-      formControlName: "alertedMcsValues",
-      selectPlaceholder: "Select an MCS Value",
-      values: [
-        { name: "-1", value: -1 },
-        { name: "0", value: 0 },
-        { name: "1", value: 1 }
-      ]
-    },
     "lineContentTypes": {
       name: "Line Content",
       description: "Type of Chat Line",
@@ -33,4 +21,27 @@ export const drop_down_select = {
         { name: "Rich Content", value: "RICH_CONTENT"}
       ]
     }
+  }
+
+  export const mih_drop_down_select = {
+    invalidFreeTextAnswer: {
+        name: "Invalid Free Text Answer",
+        description: "Search for Convs. w/ Invalid Free Text Answer",
+        class: "invalid-free-text",
+        formControlName: "invalidFreeTextAnswer",
+        selectPlaceholder: "Values",
+        values: [
+            { name: "Invalid Free Text Answer", value: "INVALID_FREE_TEXT_ANSWER"}
+          ]
+      },
+      surveyBotConversations: {
+        name: "Survey Bot Conversations",
+        description: "Search for Convs. w/ PCS",
+        class: "survey-bot-conversations",
+        formControlName: "surveyBotConversations",
+        selectPlaceholder: "Values",
+        values: [
+            { name: "Survey Bot", value: "SURVEY_BOT"}
+          ]
+      },
   }

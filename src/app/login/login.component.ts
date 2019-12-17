@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.loginForm.value)
+    
   }
 
   createForm() {
@@ -98,7 +98,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  async onSubmit() {
+  onSubmit() {
     console.log(this.loginService);
 
     this.loginService.login(this.loginForm.value).subscribe(
