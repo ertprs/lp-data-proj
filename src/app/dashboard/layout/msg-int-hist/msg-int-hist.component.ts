@@ -1,23 +1,22 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { ChartDataSets, ChartOptions, ChartType } from "chart.js";
-import { Color, Label, SingleDataSet } from "ng2-charts";
+import { Component, OnInit } from "@angular/core";
+import { ChartDataSets, ChartType } from "chart.js";
+import { Color, Label } from "ng2-charts";
 import { GetDataService } from "../../services/get-data.service";
 import * as moment from "moment";
-import { preserveWhitespacesDefault } from "@angular/compiler";
-import { bindCallback } from "rxjs";
+import { Subscription } from "rxjs";
 @Component({
   selector: "app-msg-int-hist",
   templateUrl: "./msg-int-hist.component.html",
   styleUrls: ["./msg-int-hist.component.scss", "../layout.component.scss"]
 })
 export class MsgIntHistComponent implements OnInit {
-  @Input()
   data;
+  subscription: Subscription;
   params = {
     offset: 0,
     limit: 50,
-    sort: 'start:desc'
-  }
+    sort: "start:desc"
+  };
   payload = {
     interactive: true,
     ended: true,
@@ -25,7 +24,7 @@ export class MsgIntHistComponent implements OnInit {
       from: Date.now() - 60000 * 60 * 24 * 30,
       to: Date.now()
     }
-  }
+  };
 
   public lineChartData: ChartDataSets[] = [{ data: [], label: "mcs" }];
   public lineChartLabels: Label[] = [];
@@ -129,14 +128,33 @@ export class MsgIntHistComponent implements OnInit {
 
   public polarAreaChartType: ChartType = "polarArea";
 
-  constructor(private dataService: GetDataService) {}
+  constructor(private dataService: GetDataService) {
+    this.dataService
+      .getMsgIntHistoryData({ params: this.params, payload: this.payload })
+      .subscribe(
+        (msgIntData: any) => {
+          console.log(msgIntData);
+          let response = this.getMsgScoresByAgent(msgIntData);
+          this.data = msgIntData;
+          this.lineChartData = response.lineResult;
+          this.lineChartLabels = [...Array(response.len).keys()].map(x =>
+            x.toString()
+          );
+          this.polarAreaChartLabels = Object.keys(response.polarResult);
+          this.polarAreaChartData = Object.values(response.polarResult).map(x =>
+            Number(x)
+          );
+        },
+        err => `Observer received an error`
+      );
+  }
 
   ngOnInit() {
-    this.dataService.getMsgIntHistoryData({ params: this.params, payload: this.payload }).subscribe(
-      (msgIntData: any) => {
-        console.log(msgIntData);
-        let response = this.getMsgScoresByAgent(msgIntData);
-        this.data = msgIntData;
+    this.dataService.currentMsgInt.subscribe(data => {
+      console.log(data)
+      if (data.conversationHistoryRecords) {
+        this.data = data;
+        let response = this.getMsgScoresByAgent(data);
         this.lineChartData = response.lineResult;
         this.lineChartLabels = [...Array(response.len).keys()].map(x =>
           x.toString()
@@ -145,20 +163,22 @@ export class MsgIntHistComponent implements OnInit {
         this.polarAreaChartData = Object.values(response.polarResult).map(x =>
           Number(x)
         );
-      },
-      err => `Observer received an error`
-    );
+      }
+    });
   }
 
   public getMsgScoresByAgent(data) {
     let lineResult = [];
     let len = 0;
     let polarResult = {};
+    console.log("get msg scores by agent: ", data);
     data.conversationHistoryRecords.forEach(set => {
       if (set.agentParticipants.length) {
         let setData = {
           data: [],
-          label: `${set.agentParticipants[0].agentFullName} at ${moment(new Date(set.info.startTime)).format('MM-DD-YYYY hh:MM a')}`
+          label: `${set.agentParticipants[0].agentFullName} at ${moment(
+            new Date(set.info.startTime)
+          ).format("MM-DD-YYYY hh:MM a")}`
         };
         if (set.messageScores.length > len) {
           len = set.messageScores.length;
@@ -176,4 +196,5 @@ export class MsgIntHistComponent implements OnInit {
     });
     return { lineResult, len, polarResult };
   }
+
 }

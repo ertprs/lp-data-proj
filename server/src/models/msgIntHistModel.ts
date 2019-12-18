@@ -33,7 +33,7 @@ export class MsgInteractionBody {
     searchContent?: string;
   };
   responseTime?: { from?: number; to?: number }; // Either the "from" or "to" field is mandatory
-  contentToRetrieve?: any;
+  contentToRetrieve?: any[];
   latestUpdateTime?: { from?: number };
   nps?: { from?: number; to?: number };
   questionBrick?: string;

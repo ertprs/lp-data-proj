@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { Observable, BehaviorSubject } from "rxjs";
+import { catchError, map } from "rxjs/operators";
 import { ProcessHttpmsgService } from "src/app/services/process-httpmsg.service";
 
 let baseURL = `http://localhost:4200/`;
@@ -11,6 +11,10 @@ let baseURL = `http://localhost:4200/`;
 export class GetDataService {
   bearer: string = sessionStorage.getItem("bearer");
   accountId: string = sessionStorage.getItem("accountId");
+  private engHistData = new BehaviorSubject<any>({});
+  private msgIntHistData = new BehaviorSubject<any>({});
+  currentEngHist = this.engHistData.asObservable();
+  currentMsgInt = this.msgIntHistData.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -26,11 +30,17 @@ export class GetDataService {
       JSON.stringify(this.accountId),
       JSON.stringify(this.bearer)
     );
+    
     return this.http
       .post(
         `${baseURL}api/data-history/engHistory/${this.accountId}/${this.bearer}`,
         body
       )
+      .pipe(map(response => {
+        this.engHistData.next(response);
+        console.log(response, this.currentEngHist);
+        return response;
+      }))
       .pipe(catchError(this.processhttp.handleError));
   }
 
@@ -48,7 +58,13 @@ export class GetDataService {
         `${baseURL}api/data-history/msgIntHistory/${this.accountId}/${this.bearer}`,
         body
       )
+      .pipe(map(response => {
+        this.msgIntHistData.next(response);
+        console.log(response, this.currentMsgInt);
+        return response
+      }))
       .pipe(catchError(this.processhttp.handleError));
+      
   }
 
   public getSkills(): Observable<any> {

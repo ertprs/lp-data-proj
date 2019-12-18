@@ -190,7 +190,7 @@ export class MsgIntQueryComponent implements OnInit {
 
   onSubmit() {
     let payload_form = this.serializeQueryForm(this.queryForm.value);
-    // console.log(`AFTER OPERATION ON FORM:`, payload_form);
+    console.log(`AFTER OPERATION ON FORM:`, payload_form);
     let params_form = this.serializeParamForm(this.paramForm.value);
     this.dataService
       .getMsgIntHistoryData({ params: params_form, payload: payload_form })
@@ -339,7 +339,9 @@ export class MsgIntQueryComponent implements OnInit {
         key == "surveyIds" ||
         key == "fcr" ||
         key == "answerText" ||
-        key == "intentName"
+        key == "intentName" ||
+        key == "contentToRetrieve" ||
+        key == "status"
       ) {
         if (value) {
           serialized[key] = value.split(/,\s*/);

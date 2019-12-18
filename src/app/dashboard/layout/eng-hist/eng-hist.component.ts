@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ChartOptions, ChartType, ChartDataSets } from "chart.js";
 import { Label, Color } from "ng2-charts";
 import { GetDataService } from "../../services/get-data.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-eng-hist",
@@ -10,6 +11,7 @@ import { GetDataService } from "../../services/get-data.service";
 })
 export class EngHistComponent implements OnInit {
   data;
+  subscription: Subscription;
   params = {
     offset: 0,
     limit: 50,
@@ -124,9 +126,7 @@ export class EngHistComponent implements OnInit {
   public lineChartType = "line";
   public lineChartPlugins = [];
 
-  constructor(private dataService: GetDataService) {}
-
-  ngOnInit() {
+  constructor(private dataService: GetDataService) {
     this.dataService
       .getEngHistoryData({ params: this.params, payload: this.payload })
       .subscribe(
@@ -148,9 +148,29 @@ export class EngHistComponent implements OnInit {
       );
   }
 
+  ngOnInit() {
+    this.dataService.currentEngHist.subscribe(data => {
+      console.log(data)
+      if (data.interactionHistoryRecords) {
+        this.data = data;
+        let res = this.agentAverageScores(data);
+        this.barChartData[0].data = res.mcsScores;
+        this.barChartData[1].data = res.convos;
+        this.barChartLabels = res.agents;
+        this.lineChartData = [
+          {
+            data: res.lineChartResults,
+            label: "mcs"
+          }
+        ];
+      }
+    });
+  }
+
   public agentAverageScores(data) {
     let result = {};
     let lineChartResults = [];
+    console.log("agent average scores: ", data);
     data.interactionHistoryRecords.forEach(set => {
       let date = new Date(set.info.startTime);
       lineChartResults.push({
@@ -181,4 +201,5 @@ export class EngHistComponent implements OnInit {
     }
     return allData;
   }
+
 }

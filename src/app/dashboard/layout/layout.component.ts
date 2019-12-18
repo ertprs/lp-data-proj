@@ -9,25 +9,23 @@ import { Router, ActivatedRoute } from "@angular/router";
 export class LayoutComponent implements OnInit {
   @Input()
   apiType: string;
-  navLinks: any[];
+  navLinks: any[] = [
+    {
+      label: " Messaging Interactions History",
+      link: "/dashboard/msg-interactions",
+      index: 0,
+      icon: "pie_chart"
+    },
+    {
+      label: " Engagement History",
+      link: "/dashboard/engagement-history",
+      index: 1,
+      icon: "bar_chart"
+    }
+  ];
   activeLinkIndex = -1;
 
-  constructor(private route: ActivatedRoute, private router: Router) {
-    this.navLinks = [
-      {
-        label: " Messaging Interactions History",
-        link: "/dashboard/msg-interactions",
-        index: 0,
-        icon: "pie_chart"
-      },
-      {
-        label: " Engagement History",
-        link: "/dashboard/engagement-history",
-        index: 1,
-        icon: "bar_chart"
-      }
-    ];
-  }
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
     this.apiType = this.route.snapshot.params["apiType"];
