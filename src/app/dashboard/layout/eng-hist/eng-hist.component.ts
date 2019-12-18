@@ -1,20 +1,20 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
-import { Label, Color } from 'ng2-charts';
-import { GetDataService } from '../../services/get-data.service';
+import { Component, OnInit } from "@angular/core";
+import { ChartOptions, ChartType, ChartDataSets } from "chart.js";
+import { Label, Color } from "ng2-charts";
+import { GetDataService } from "../../services/get-data.service";
 
 @Component({
-  selector: 'app-eng-hist',
-  templateUrl: './eng-hist.component.html',
-  styleUrls: ['./eng-hist.component.scss', "../layout.component.scss"]
+  selector: "app-eng-hist",
+  templateUrl: "./eng-hist.component.html",
+  styleUrls: ["./eng-hist.component.scss", "../layout.component.scss"]
 })
 export class EngHistComponent implements OnInit {
   data;
   params = {
     offset: 0,
     limit: 50,
-    sort: 'start:desc'
-  }
+    sort: "start:desc"
+  };
   payload = {
     interactive: true,
     ended: true,
@@ -22,24 +22,26 @@ export class EngHistComponent implements OnInit {
       from: Date.now() - 60000 * 60 * 24 * 30,
       to: Date.now()
     }
-  }
+  };
 
   public barChartOptions: ChartOptions = {
     title: {
       display: true,
-      text: 'Average MCS Scores / Agent'
-  },
+      text: "Average MCS Scores / Agent"
+    },
     responsive: true,
     scales: {
-      xAxes: [{
+      xAxes: [
+        {
           gridLines: {
-              offsetGridLines: true
+            offsetGridLines: true
           },
           scaleLabel: {
             display: true,
             labelString: "Agents"
           }
-      }],
+        }
+      ],
       yAxes: [
         {
           scaleLabel: {
@@ -48,29 +50,25 @@ export class EngHistComponent implements OnInit {
           }
         }
       ]
-  }
+    }
   };
   public barChartLabels: Label[] = [];
-  public barChartType: ChartType = 'bar';
+  public barChartType: ChartType = "bar";
   public barChartLegend = true;
   public barChartPlugins = [];
 
   public barChartData: ChartDataSets[] = [
-    { data: [], label: 'Average MCS' },
-    { data: [], label: '# of Conv' },
+    { data: [], label: "Average MCS" },
+    { data: [], label: "# of Conv" }
   ];
 
-  public lineChartData: ChartDataSets[] = [
-    { data: [], label: 'mcs'}
-  ];
-  public lineChartLabels: Label[] = [
-    // 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
-  ];
+  public lineChartData: ChartDataSets[] = [{ data: [], label: "mcs" }];
+  public lineChartLabels: Label[] = [];
   public lineChartOptions = {
     title: {
       display: true,
-      text: 'Chronology of MCS Scores'
-  },
+      text: "Chronology of MCS Scores"
+    },
     responsive: true,
     scales: {
       xAxes: [
@@ -78,11 +76,11 @@ export class EngHistComponent implements OnInit {
           responsive: true,
           type: "time",
           time: {
-            unit: 'month',
+            unit: "month",
             unitStepSize: 3,
             displayFormats: {
               quarter: "MMM DD"
-            },
+            }
           },
           scaleLabel: {
             display: true,
@@ -126,29 +124,28 @@ export class EngHistComponent implements OnInit {
   public lineChartType = "line";
   public lineChartPlugins = [];
 
-  constructor(
-    private dataService: GetDataService
-  ) {
-    
-   }
+  constructor(private dataService: GetDataService) {}
 
   ngOnInit() {
-    this.dataService.getEngHistoryData({ params: this.params, payload: this.payload})
-    .subscribe((response: any) => {
-      console.log(response);
-      let res = this.agentAverageScores(response);
-      this.data = response;
-      this.barChartData[0].data = res.mcsScores;
-      this.barChartData[1].data = res.convos;
-      this.barChartLabels = res.agents
-      this.lineChartData = [
-        {
-          data: res.lineChartResults,
-          label: "mcs"
-        }
-      ];
-    },
-    err => `Observer received an error`)
+    this.dataService
+      .getEngHistoryData({ params: this.params, payload: this.payload })
+      .subscribe(
+        (response: any) => {
+          console.log(response);
+          let res = this.agentAverageScores(response);
+          this.data = response;
+          this.barChartData[0].data = res.mcsScores;
+          this.barChartData[1].data = res.convos;
+          this.barChartLabels = res.agents;
+          this.lineChartData = [
+            {
+              data: res.lineChartResults,
+              label: "mcs"
+            }
+          ];
+        },
+        err => `Observer received an error`
+      );
   }
 
   public agentAverageScores(data) {
@@ -160,30 +157,28 @@ export class EngHistComponent implements OnInit {
         x: date,
         y: set.info.chatMCS
       });
-      if(!result[set.info.agentFullName]) {
+      if (!result[set.info.agentFullName]) {
         result[set.info.agentFullName] = {
           chatMCS: set.info.chatMCS,
           count: 1
-        }
-      }
-      else {
+        };
+      } else {
         let agent = result[set.info.agentFullName];
         agent.chatMCS += set.info.chatMCS;
         agent.count += 1;
       }
-    })
+    });
     let allData = {
       mcsScores: [],
       agents: [],
       convos: [],
       lineChartResults
-    }
-    for(let key in result) {
-      allData.mcsScores.push(result[key].chatMCS/result[key].count);
+    };
+    for (let key in result) {
+      allData.mcsScores.push(result[key].chatMCS / result[key].count);
       allData.agents.push(key);
       allData.convos.push(result[key].count);
     }
     return allData;
   }
-
 }

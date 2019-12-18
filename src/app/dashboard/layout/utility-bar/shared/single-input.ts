@@ -54,14 +54,16 @@ export const mih_single_input = {
   },
   intentName: {
     name: "Intent Name",
-    description: "Search Intent Names (Requires - contentToRetrieve[campaign, intents])",
+    description:
+      "Search Intent Names (Requires - contentToRetrieve[campaign, intents])",
     class: "intent-name",
     formControlName: "intentName",
     inputPlaceholder: "Type your intents"
   },
   intentConfidenceScore: {
     name: "Intent Confidence Score",
-    description: "Search Confidence Score (Up to 3 Decimal Places, Requires - contentToRetrieve[messageRecords, intents])",
+    description:
+      "Search Confidence Score (Up to 3 Decimal Places, Requires - contentToRetrieve[messageRecords, intents])",
     class: "intent-confidence-score",
     formControlName: "intentConfidenceScore",
     inputPlaceholder: "Parameter will include x >= score"

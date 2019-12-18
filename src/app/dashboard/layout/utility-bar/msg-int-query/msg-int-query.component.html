@@ -19,47 +19,48 @@
       </div>
     </div>
     <form [formGroup]="paramForm">
-            <mat-error *ngIf="errMess">
-                    {{ errMess }}
-                  </mat-error>
-            <mat-accordion>
-                    <mat-expansion-panel >
-                      <mat-expansion-panel-header class="space-between">
-                        <mat-panel-title>
-                          Parameters
-                        </mat-panel-title>
-                        <mat-panel-description>
-                          Set Data Size and Order Parameters
-                        </mat-panel-description>
-                      </mat-expansion-panel-header>
-                      <mat-form-field *ngIf="paramForm">
-                        <input
-                          matInput
-                          [placeholder]="params.limit.inputPlaceholder"
-                          [formControlName]="params.limit.formControlName"
-                          
-                        />
-                      </mat-form-field>
-                      <mat-form-field *ngIf="paramForm">
-                        <input
-                          matInput
-                          [placeholder]="params.offset.inputPlaceholder"
-                          [formControlName]="params.offset.formControlName"
-                          
-                        />
-                      </mat-form-field>
-                      <mat-form-field *ngIf="paramForm">
-                        <mat-select [formControlName]="params.sort.formControlName" [placeholder]="params.sort.selectPlaceholder">
-                          <mat-option
-                            *ngFor="let lookup of params.sort.values"
-                            [value]="lookup.value"
-                          >
-                            {{ lookup.name }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </mat-expansion-panel>
-                  </mat-accordion>
+      <mat-error *ngIf="errMess">
+        {{ errMess }}
+      </mat-error>
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="space-between">
+            <mat-panel-title>
+              Parameters
+            </mat-panel-title>
+            <mat-panel-description>
+              Set Data Size and Order Parameters
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field *ngIf="paramForm">
+            <input
+              matInput
+              [placeholder]="params.limit.inputPlaceholder"
+              [formControlName]="params.limit.formControlName"
+            />
+          </mat-form-field>
+          <mat-form-field *ngIf="paramForm">
+            <input
+              matInput
+              [placeholder]="params.offset.inputPlaceholder"
+              [formControlName]="params.offset.formControlName"
+            />
+          </mat-form-field>
+          <mat-form-field *ngIf="paramForm">
+            <mat-select
+              [formControlName]="params.sort.formControlName"
+              [placeholder]="params.sort.selectPlaceholder"
+            >
+              <mat-option
+                *ngFor="let lookup of params.sort.values"
+                [value]="lookup.value"
+              >
+                {{ lookup.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-expansion-panel>
+      </mat-accordion>
     </form>
     <form
       fxLayoutGap="10"
@@ -68,9 +69,11 @@
       [formGroup]="queryForm"
       (ngSubmit)="onSubmit()"
     >
-
       <mat-accordion fxLayoutGap="10" *ngFor="let type of time.times">
-        <mat-expansion-panel formGroupName="start" class="startTime">
+        <mat-expansion-panel
+          [formGroupName]="type.formGroupName"
+          class="startTime"
+        >
           <mat-expansion-panel-header class="space-between">
             <mat-panel-title>
               {{ type.name }}
@@ -79,11 +82,64 @@
               {{ type.description }}
             </mat-panel-description>
           </mat-expansion-panel-header>
+          <div *ngIf="type.name != 'Latest Update Time'">
+            <div
+              *ngFor="let each of time.body | keyvalue: returnZero"
+              [formGroupName]="each.value.formGroupName"
+            >
+              <mat-label>{{ each.value.name }}</mat-label>
+              <mat-form-field>
+                <input
+                  matInput
+                  [matDatepicker]="picker"
+                  placeholder="Choose a date"
+                  [value]="date"
+                  formControlName="date"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select formControlName="hour" placeholder="Hour">
+                  <mat-option
+                    *ngFor="let hour of each.value.hours"
+                    [value]="hour"
+                  >
+                    {{ hour }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select formControlName="minute" placeholder="Minute">
+                  <mat-option
+                    *ngFor="let minute of each.value.minutes"
+                    [value]="minute"
+                  >
+                    {{ minute }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select formControlName="period" placeholder="AM/PM">
+                  <mat-option
+                    *ngFor="let period of each.value.periods"
+                    [value]="period"
+                  >
+                    {{ period }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
           <div
-            *ngFor="let each of time.body | keyvalue: returnZero"
-            [formGroupName]="each.value.formGroupName"
+            *ngIf="type.name == 'Latest Update Time'"
+            [formGroupName]="time.body.From.formGroupName"
           >
-            <mat-label>{{ each.value.name }}</mat-label>
+            <mat-label>{{ time.body.From.name }}</mat-label>
             <mat-form-field>
               <input
                 matInput
@@ -101,7 +157,7 @@
             <mat-form-field>
               <mat-select formControlName="hour" placeholder="Hour">
                 <mat-option
-                  *ngFor="let hour of each.value.hours"
+                  *ngFor="let hour of time.body.From.hours"
                   [value]="hour"
                 >
                   {{ hour }}
@@ -111,7 +167,7 @@
             <mat-form-field>
               <mat-select formControlName="minute" placeholder="Minute">
                 <mat-option
-                  *ngFor="let minute of each.value.minutes"
+                  *ngFor="let minute of time.body.From.minutes"
                   [value]="minute"
                 >
                   {{ minute }}
@@ -121,7 +177,7 @@
             <mat-form-field>
               <mat-select formControlName="period" placeholder="AM/PM">
                 <mat-option
-                  *ngFor="let period of each.value.periods"
+                  *ngFor="let period of time.body.From.periods"
                   [value]="period"
                 >
                   {{ period }}
@@ -143,56 +199,56 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
 
-            <mat-form-field>
-              <input
-                matInput
-                [placeholder]="item.value.inputPlaceholder"
-                [formControlName]="item.value.formControlName"
-              />
-            </mat-form-field>
-            <mat-form-field>
-              <mat-select>
-                <mat-option
-                  *ngFor="let lookup of item.value.values"
-                  [value]="lookup.value"
-                >
-                  {{ lookup.name }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              [placeholder]="item.value.inputPlaceholder"
+              [formControlName]="item.value.formControlName"
+            />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select>
+              <mat-option
+                *ngFor="let lookup of item.value.values"
+                [value]="lookup.value"
+              >
+                {{ lookup.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </mat-expansion-panel>
       </mat-accordion>
 
       <mat-accordion *ngFor="let item of chainedValues2 | keyvalue: returnZero">
-            <mat-expansion-panel>
-              <mat-expansion-panel-header class="space-between">
-                <mat-panel-title>
-                  {{ item.value.name }}
-                </mat-panel-title>
-                <mat-panel-description>
-                  {{ item.value.description }}
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-    
-                <mat-form-field>
-                  <input
-                    matInput
-                    [placeholder]="item.value.inputPlaceholder"
-                    [formControlName]="item.value.formControlName"
-                  />
-                </mat-form-field>
-                <mat-form-field>
-                  <mat-select>
-                    <mat-option
-                      *ngFor="let lookup of item.value.values"
-                      [value]="lookup"
-                    >
-                      {{ lookup }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-            </mat-expansion-panel>
-          </mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="space-between">
+            <mat-panel-title>
+              {{ item.value.name }}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ item.value.description }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <mat-form-field>
+            <input
+              matInput
+              [placeholder]="item.value.inputPlaceholder"
+              [formControlName]="item.value.formControlName"
+            />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select>
+              <mat-option
+                *ngFor="let lookup of item.value.values"
+                [value]="lookup"
+              >
+                {{ lookup }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-expansion-panel>
+      </mat-accordion>
 
       <mat-accordion *ngFor="let item of dropDownSelect | keyvalue: returnZero">
         <mat-expansion-panel>
@@ -220,33 +276,33 @@
         </mat-expansion-panel>
       </mat-accordion>
 
-      <mat-accordion *ngFor="let item of doubleSelect | keyvalue: returnZero" [formGroupName]="item.value.formGroupName">
-            <mat-expansion-panel>
-              <mat-expansion-panel-header class="space-between">
-                <mat-panel-title>
-                  {{ item.value.name }}
-                </mat-panel-title>
-                <mat-panel-description>
-                  {{ item.value.description }}
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-              <div *ngFor="let each of item.value.sets">
-              <mat-form-field>
-                <mat-select
-                  [placeholder]="each.placeholder"
-                  [formControlName]="each.formControlName"
-                >
-                  <mat-option
-                    *ngFor="let lookup of each.values"
-                    [value]="lookup"
-                  >
-                    {{ lookup }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            </mat-expansion-panel>
-          </mat-accordion>
+      <mat-accordion
+        *ngFor="let item of doubleSelect | keyvalue: returnZero"
+        [formGroupName]="item.value.formGroupName"
+      >
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="space-between">
+            <mat-panel-title>
+              {{ item.value.name }}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ item.value.description }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div *ngFor="let each of item.value.sets">
+            <mat-form-field>
+              <mat-select
+                [placeholder]="each.placeholder"
+                [formControlName]="each.formControlName"
+              >
+                <mat-option *ngFor="let lookup of each.values" [value]="lookup">
+                  {{ lookup }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
 
       <mat-accordion *ngFor="let item of singleInput | keyvalue: returnZero">
         <mat-expansion-panel>
@@ -281,14 +337,13 @@
               {{ item.value.description }}
             </mat-panel-description>
           </mat-expansion-panel-header>
-          <mat-form-field  *ngFor="let input of item.value.sets">
+          <mat-form-field *ngFor="let input of item.value.sets">
             <input
               matInput
               [placeholder]="input.placeholder"
               [formControlName]="input.formControlName"
             />
           </mat-form-field>
-          
         </mat-expansion-panel>
       </mat-accordion>
 
@@ -302,7 +357,10 @@
               (Requires: Keywords, Summary, or Engagement Attributes)
             </mat-panel-description>
           </mat-expansion-panel-header>
-          <mat-radio-group aria-label="Select an option" formControlName="conversationsWithStepUpOnly">
+          <mat-radio-group
+            aria-label="Select an option"
+            formControlName="conversationsWithStepUpOnly"
+          >
             <mat-radio-button value="true">True</mat-radio-button>
             <mat-radio-button value="false">False</mat-radio-button>
           </mat-radio-group>

@@ -1,15 +1,15 @@
-$custom-active: #FFCC80;
+$custom-active: #ffcc80;
 
 .active {
-    background: $custom-active;
+  background: $custom-active;
 }
 
 img {
-    margin: 10px;
+  margin: 10px;
 }
 .nav {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 100;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 100;
 }

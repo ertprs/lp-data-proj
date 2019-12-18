@@ -1,9 +1,17 @@
 <mat-toolbar fxLayout="row" fxLayoutGap="10" class="nav" color="primary">
-    <span><img src="/assets/logo.png" height=41 width=41></span>
-    <a mat-button routerLink='/home' routerLinkActive="active">Home</a>
-    <a mat-button routerLink='/about' routerLinkActive="active">About</a>
-    <a mat-button routerLink='/contact' routerLinkActive="active">Contact</a>
-    <a *ngIf="!loggedIn" mat-button routerLink='/login' routerLinkActive="active">Login</a>
-    <a *ngIf="loggedIn" mat-button (click)="logout()">Logout</a>
-    <a *ngIf="loggedIn" mat-button routerLink='/dashboard' routerLinkActive="active">Dashboard</a>
+  <span><img src="/assets/logo.png" height="41" width="41"/></span>
+  <a mat-button routerLink="/home" routerLinkActive="active">Home</a>
+  <a mat-button routerLink="/about" routerLinkActive="active">About</a>
+  <a mat-button routerLink="/contact" routerLinkActive="active">Contact</a>
+  <a *ngIf="!loggedIn" mat-button routerLink="/login" routerLinkActive="active"
+    >Login</a
+  >
+  <a *ngIf="loggedIn" mat-button (click)="logout()">Logout</a>
+  <a
+    *ngIf="loggedIn"
+    mat-button
+    routerLink="/dashboard"
+    routerLinkActive="active"
+    >Dashboard</a
+  >
 </mat-toolbar>

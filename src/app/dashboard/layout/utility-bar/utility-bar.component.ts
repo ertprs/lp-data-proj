@@ -1,24 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-utility-bar',
-  templateUrl: './utility-bar.component.html',
-  styleUrls: ['./utility-bar.component.scss', '../layout.component.scss']
+  selector: "app-utility-bar",
+  templateUrl: "./utility-bar.component.html",
+  styleUrls: ["./utility-bar.component.scss", "../layout.component.scss"]
 })
 export class UtilityBarComponent implements OnInit {
+  constructor(private router: Router) {}
 
-  constructor(
-    private router: Router
-  ) { }
+  ngOnInit() {}
 
-  ngOnInit() {
+  logout() {
+    sessionStorage.setItem("bearer", "");
+    sessionStorage.setItem("accountId", "");
+    this.router.navigate(["/home"]);
   }
-
-  logout(){
-    sessionStorage.setItem('bearer', '');
-    sessionStorage.setItem('accountId', '');
-    this.router.navigate(['/home'])
-  }
-
 }

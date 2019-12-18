@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Pipe } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { FormGroup, FormBuilder, Validator } from "@angular/forms";
 import { GetDataService } from "../../../services/get-data.service";
 import { eh_drop_down_select } from "../shared/drop-down-select";
@@ -6,12 +6,15 @@ import { eh_chained_values } from "../shared/chained-values";
 import { eh_time } from "../shared/time";
 import { eh_single_input } from "../shared/single-input";
 import { eh_multiple_input } from "../shared/multiple-input";
-import { params } from '../shared/params';
+import { params } from "../shared/params";
 
 @Component({
   selector: "app-eng-hist-query",
   templateUrl: "./eng-hist-query.component.html",
-  styleUrls: ["./eng-hist-query.component.scss", "../utility-bar.component.scss"]
+  styleUrls: [
+    "./eng-hist-query.component.scss",
+    "../utility-bar.component.scss"
+  ]
 })
 export class EngHistQueryComponent implements OnInit {
   @Input()
@@ -59,18 +62,18 @@ export class EngHistQueryComponent implements OnInit {
     selectedIntentOnly: "",
     conversationsWithStepUpOnly: "",
     agentSurveySearch: this.fb.group({
-        pendingAgentSurvey: "",
-        questionId: "", 
-        questionName: "", 
-        questionKeywords: "", 
-        answerKeywords: "", 
-        surveyId: ""
+      pendingAgentSurvey: "",
+      questionId: "",
+      questionName: "",
+      questionKeywords: "",
+      answerKeywords: "",
+      surveyId: ""
     })
   };
   templateParam = {
     limit: 50,
     offset: 0,
-    sort: "start:desc"
+    sort: ""
   };
   queryForm: FormGroup;
   paramForm: FormGroup;
@@ -84,21 +87,18 @@ export class EngHistQueryComponent implements OnInit {
 
   ngOnInit() {
     this.dataService.getSkills().subscribe((skills: any) => {
-      // console.log(skills);
       this.chainedValues.skills.values = skills.map(skill => {
         return { name: `${skill.id} (${skill.name})`, value: skill.id };
       });
     });
 
     this.dataService.getAgents().subscribe((agents: any) => {
-      // console.log(agents);
       this.chainedValues.agents.values = agents.map(agent => {
         return { name: `${agent.id} (${agent.loginName})`, value: agent.id };
       });
     });
 
     this.dataService.getAgentGroups().subscribe((agentGroups: any) => {
-      // console.log(agentGroups);
       this.chainedValues.agentGroups.values = agentGroups.map(group => {
         return { name: `${group.id} (${group.name})`, value: group.id };
       });
@@ -106,7 +106,7 @@ export class EngHistQueryComponent implements OnInit {
   }
 
   createParamForm() {
-    this.paramForm = this.fb.group(this.templateParam)
+    this.paramForm = this.fb.group(this.templateParam);
     this.paramForm.valueChanges.subscribe(data => this.onValueChanged(data));
   }
 
@@ -128,7 +128,8 @@ export class EngHistQueryComponent implements OnInit {
         },
         error => {
           console.log(error);
-          this.errMess = "The query was unsuccessful due to incorrect data or data type"
+          this.errMess =
+            "The query was unsuccessful due to incorrect data or data type";
         }
       );
   }
@@ -150,8 +151,10 @@ export class EngHistQueryComponent implements OnInit {
     let serialized = {};
     for (let key in formValue) {
       let value = formValue[key];
-      if(key == "sort") {
-        value ? serialized[key] = `start:${value}` : serialized[key] = `start:desc`
+      if (key == "sort") {
+        value
+          ? (serialized[key] = `start:${value}`)
+          : (serialized[key] = `start:desc`);
       } else {
         serialized[key] = value;
       }
@@ -160,7 +163,7 @@ export class EngHistQueryComponent implements OnInit {
   }
 
   serializeQueryForm(formValue) {
-    let serialized = {}
+    let serialized = {};
     for (let key in formValue) {
       let value = formValue[key];
       // start, duration, chatMCS, coBrowseDuration, keyword_search_area
@@ -169,29 +172,51 @@ export class EngHistQueryComponent implements OnInit {
           // start
           if (typeof value.from == "object") {
             if (!value.from.date || !value.to.date) {
-              serialized[key] = { from: Date.now() - 60000 * 60 * 24 * 30, to: Date.now() };
+              serialized[key] = {
+                from: Date.now() - 60000 * 60 * 24 * 30,
+                to: Date.now()
+              };
             } else {
               serialized[key] = {
                 from: new Date(
-                `${JSON.stringify(value.from.date).substring(0, 11)} ${value.from.hour ? value.from.hour + ":" + value.from.minute + " " + value.from.period : ""}`
-              ).valueOf(),
-              to: new Date(
-                `${JSON.stringify(value.to.date).substring(0, 11)} ${value.to.hour ? value.to.hour + ":" + value.to.minute + " " + value.from.period : ""}`
-              ).valueOf()
+                  `${JSON.stringify(value.from.date).substring(0, 11)} ${
+                    value.from.hour
+                      ? value.from.hour +
+                        ":" +
+                        value.from.minute +
+                        " " +
+                        value.from.period
+                      : ""
+                  }`
+                ).valueOf(),
+                to: new Date(
+                  `${JSON.stringify(value.to.date).substring(0, 11)} ${
+                    value.to.hour
+                      ? value.to.hour +
+                        ":" +
+                        value.to.minute +
+                        " " +
+                        value.from.period
+                      : ""
+                  }`
+                ).valueOf()
               };
             }
           }
           // duration, chatMCS, coBrowseDuration
           if (typeof value.from != "object") {
             if (value.from && value.to) {
-              serialized[key] = { from: Number(value.from), to: Number(value.to)};
+              serialized[key] = {
+                from: Number(value.from),
+                to: Number(value.to)
+              };
             }
           }
         }
         // keyword_search_area
         else if (key === "keyword_search_area") {
-          if(value.type) {
-            serialized[key] = { type: value.type.split(/,\s*/) }
+          if (value.type) {
+            serialized[key] = { type: value.type.split(/,\s*/) };
           }
         }
       } else if (
@@ -205,14 +230,12 @@ export class EngHistQueryComponent implements OnInit {
           // agentIds, agentGroupIds, skillIds
           if (key != "lineContentTypes") {
             serialized[key] = value.split(/,\s*/).map(x => Number(x));
-          }
-          else {
+          } else {
             // lineContentTypes, alertedMcsValues
             serialized[key] = Array(value);
           }
         }
-      } 
-      else if(value) {
+      } else if (value) {
         serialized[key] = value;
       }
     }

@@ -1,7 +1,7 @@
 export const eh_multiple_input = {
   duration: {
     name: "Duration",
-    description: "Range in Seconds (60 = 1 minute)",
+    description: "Range in Seconds (60 = 1 minute): 0-1000",
     class: "duration",
     formGroupName: "duration",
     sets: [
@@ -35,7 +35,7 @@ export const mih_multiple_input = {
   duration: eh_multiple_input.duration,
   mcs: {
     name: "MCS",
-    description: "Range of Meaningful Connection Score",
+    description: "Range of Meaningful Connection Score: 0-100",
     class: "mcs",
     formGroupName: "mcs",
     sets: [
@@ -59,17 +59,57 @@ export const mih_multiple_input = {
     class: "sde-search",
     formGroupName: "sdeSearch",
     sets: [
-      { name: "personalInfo", placeholder: "Personal Info", formControlName: "personalInfo" },
-      { name: "customerInfo", placeholder: "Customer Info", formControlName: "customerInfo" },
-      { name: "userUpdate", placeholder: "User Update", formControlName: "userUpdate" },
-      { name: "marketingCampaignInfo", placeholder: "Marketing Campaign Info", formControlName: "marketingCampaignInfo" },
+      {
+        name: "personalInfo",
+        placeholder: "Personal Info",
+        formControlName: "personalInfo"
+      },
+      {
+        name: "customerInfo",
+        placeholder: "Customer Info",
+        formControlName: "customerInfo"
+      },
+      {
+        name: "userUpdate",
+        placeholder: "User Update",
+        formControlName: "userUpdate"
+      },
+      {
+        name: "marketingCampaignInfo",
+        placeholder: "Marketing Campaign Info",
+        formControlName: "marketingCampaignInfo"
+      },
       { name: "lead", placeholder: "Lead", formControlName: "lead" },
-      { name: "purchase", placeholder: "Purchase", formControlName: "purchase" },
-      { name: "viewedProduct", placeholder: "Viewed Product", formControlName: "viewedProduct" },
-      { name: "cartStatus", placeholder: "Cart Status", formControlName: "cartStatus" },
-      { name: "serviceActivity", placeholder: "Service Activity", formControlName: "serviceActivity" },
-      { name: "visitorError", placeholder: "Visitor Error", formControlName: "visitorError" },
-      { name: "searchContent", placeholder: "Search Content", formControlName: "searchContent" },
+      {
+        name: "purchase",
+        placeholder: "Purchase",
+        formControlName: "purchase"
+      },
+      {
+        name: "viewedProduct",
+        placeholder: "Viewed Product",
+        formControlName: "viewedProduct"
+      },
+      {
+        name: "cartStatus",
+        placeholder: "Cart Status",
+        formControlName: "cartStatus"
+      },
+      {
+        name: "serviceActivity",
+        placeholder: "Service Activity",
+        formControlName: "serviceActivity"
+      },
+      {
+        name: "visitorError",
+        placeholder: "Visitor Error",
+        formControlName: "visitorError"
+      },
+      {
+        name: "searchContent",
+        placeholder: "Search Content",
+        formControlName: "searchContent"
+      }
     ]
   },
   nps: {
@@ -88,12 +128,36 @@ export const mih_multiple_input = {
     class: "agent-survey-search",
     formGroupName: "agentSurveySearch",
     sets: [
-      { name: "pendingAgentSurvey", placeholder: "Pending Agent Survey - True/False", formControlName: "pendingAgentSurvey" },
-      { name: "questionId", placeholder: "Search Question Ids", formControlName: "questionId" },
-      { name: "questionName", placeholder: "Search Question Names", formControlName: "questionName" },
-      { name: "questionKeywords", placeholder: "Search Question Keywords", formControlName: "questionKeywords" },
-      { name: "answerKeywords", placeholder: "Search Answer Keywords", formControlName: "answerKeywords" },
-      { name: "surveyId", placeholder: "Search Survey Id", formControlName: "surveyId" },
+      {
+        name: "pendingAgentSurvey",
+        placeholder: "Pending Agent Survey - True/False",
+        formControlName: "pendingAgentSurvey"
+      },
+      {
+        name: "questionId",
+        placeholder: "Search Question Ids",
+        formControlName: "questionId"
+      },
+      {
+        name: "questionName",
+        placeholder: "Search Question Names",
+        formControlName: "questionName"
+      },
+      {
+        name: "questionKeywords",
+        placeholder: "Search Question Keywords",
+        formControlName: "questionKeywords"
+      },
+      {
+        name: "answerKeywords",
+        placeholder: "Search Answer Keywords",
+        formControlName: "answerKeywords"
+      },
+      {
+        name: "surveyId",
+        placeholder: "Search Survey Id",
+        formControlName: "surveyId"
+      }
     ]
   }
 };

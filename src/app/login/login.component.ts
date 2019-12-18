@@ -1,15 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  ViewEncapsulation,
-  Input
-} from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { LoginService } from "../services/login.service";
-// import { Observable, interval, of } from "rxjs";
 import { Router } from "@angular/router";
-// import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-login",
@@ -23,7 +15,6 @@ export class LoginComponent implements OnInit {
   disabled: boolean = true;
   validationErrorLogin: boolean = false;
   loginValidationMsg: string;
-  // loggedIn: boolean = false;
 
   formErrors = {
     account: "",
@@ -49,13 +40,11 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private loginService: LoginService,
     private router: Router
-  ) {
-    this.createForm();
-    this.onValueChanged();
-  }
+  ) {}
 
   ngOnInit() {
-    
+    this.createForm();
+    this.onValueChanged();
   }
 
   createForm() {
@@ -77,7 +66,7 @@ export class LoginComponent implements OnInit {
     for (const field in this.formErrors) {
       if (this.formErrors.hasOwnProperty(field)) {
         // clear previous error message (if any)
-        console.log("Form Error Own Properties: ", this.formErrors)
+        console.log("Form Error Own Properties: ", this.formErrors);
         this.formErrors[field] = "";
         const control = form.get(field);
         if (control && control.dirty && !control.valid) {
@@ -99,8 +88,6 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.loginService);
-
     this.loginService.login(this.loginForm.value).subscribe(
       (bearer: any) => {
         console.log(bearer);
@@ -114,7 +101,6 @@ export class LoginComponent implements OnInit {
         this.router.navigate(["/dashboard/engagement-history"]);
       },
       error => {
-        console.log(error);
         sessionStorage.setItem("bearer", "");
         this.onValueChanged("invalid");
       }

@@ -14,7 +14,6 @@ export class ContactCenterService {
       .pipe(map(response => response.data))
       .toPromise()
       .catch(err => err);
-    // console.log(skills);
     return skills;
   }
 
@@ -26,7 +25,6 @@ export class ContactCenterService {
       .pipe(map(response => response.data))
       .toPromise()
       .catch(err => err);
-    // console.log(agents);
     return agents;
   }
 
@@ -38,7 +36,6 @@ export class ContactCenterService {
       .pipe(map(response => response.data))
       .toPromise()
       .catch(err => err);
-    // console.log(agentGroups);
     return agentGroups;
   }
 }

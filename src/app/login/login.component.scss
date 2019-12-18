@@ -1,39 +1,31 @@
-$custom-primary: #FB8C00;
-$custom-disabled: #FFCC80;
+$custom-primary: #fb8c00;
+$custom-disabled: #ffcc80;
 
 .disabledButton {
-    background: $custom-disabled;
+  background: $custom-disabled;
 }
 
 .form {
-    margin-left: auto;
-    margin-right: auto;
-    width: 30%;
-    min-width: 300px;
-    max-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+  min-width: 300px;
+  max-width: 450px;
 }
 
 .full-width {
-    width: 100%;
+  width: 100%;
 }
 
 .loginButton {
-    background: $custom-primary;
+  background: $custom-primary;
 }
 
 .login-form {
-    height: 100%;
-    padding: 0%;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-  }
-
-//   .visible {
-//       display: block;
-//   }
-
-//   .invisible {
-//       display: none;
-//   }
+  height: 100%;
+  padding: 0%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}

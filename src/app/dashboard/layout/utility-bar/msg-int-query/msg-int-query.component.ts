@@ -1,13 +1,16 @@
-import { Component, OnInit, Input, Pipe } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { FormGroup, FormBuilder, Validator } from "@angular/forms";
 import { GetDataService } from "../../../services/get-data.service";
 import { mih_drop_down_select } from "../shared/drop-down-select";
-import { mih_chained_values, mih_chained_values_2 } from "../shared/chained-values";
+import {
+  mih_chained_values,
+  mih_chained_values_2
+} from "../shared/chained-values";
 import { mih_time } from "../shared/time";
 import { mih_single_input } from "../shared/single-input";
 import { mih_multiple_input } from "../shared/multiple-input";
-import { params } from '../shared/params';
-import { mih_double_select } from '../shared/double-select';
+import { params } from "../shared/params";
+import { mih_double_select } from "../shared/double-select";
 
 @Component({
   selector: "app-msg-int-query",
@@ -28,7 +31,7 @@ export class MsgIntQueryComponent implements OnInit {
   templateQuery = {
     interactive: true,
     ended: true,
-    start: this.fb.group({ 
+    start: this.fb.group({
       from: this.fb.group({
         hour: "",
         minute: "",
@@ -42,11 +45,21 @@ export class MsgIntQueryComponent implements OnInit {
         date: ""
       })
     }),
-    end: this.fb.group({ 
-      from: "", 
-      to: "" 
+    end: this.fb.group({
+      from: this.fb.group({
+        hour: "",
+        minute: "",
+        period: "",
+        date: ""
+      }),
+      to: this.fb.group({
+        hour: "",
+        minute: "",
+        period: "",
+        date: ""
+      })
     }),
-    status: "", // Valid values: "OPEN", "CLOSE"
+    status: "",
     skillIds: "",
     latestSkillIds: "",
     agentIds: "",
@@ -54,55 +67,71 @@ export class MsgIntQueryComponent implements OnInit {
     agentGroupIds: "",
     keyword: "",
     summary: "",
-    duration: this.fb.group({ 
-      from: "", 
-      to: "" 
-    }),
-    mcs: this.fb.group({ 
+    duration: this.fb.group({
       from: "",
-      
-      to: "" 
-    }), 
-    alertedMcsValues: "", // Valid values: "-1", "0", "1"
-    csat: this.fb.group({ 
-      from: "", 
-      to: "" 
+      to: ""
     }),
-    source: "", // APP, SHARK (WEB), AGENT, SMS, FACEBOOK, Apple Business Chat, WhatsApp Business
-    device: "", // Possible values: DESKTOP, TABLET, MOBILE, NA
-    messageContentTypes: "", // Valid values: TEXT_PLAIN, TEXT_HTML, LINK, HOSTED_FILE, IMG, SECURE_FORM_INVITATION, SECURE_FORM_SUBMIT, RICH_CONTENT
-    latestConversationQueueState: "", // Valid values: IN_QUEUE,ACTIVE
+    mcs: this.fb.group({
+      from: "",
+      to: ""
+    }),
+    alertedMcsValues: "",
+    csat: this.fb.group({
+      from: "",
+      to: ""
+    }),
+    source: "",
+    device: "",
+    messageContentTypes: "",
+    latestConversationQueueState: "",
     sdeSearch: this.fb.group({
       personalInfo: "",
-      customerInfo: "", 
+      customerInfo: "",
       userUpdate: "",
       marketingCampaignInfo: "",
       lead: "",
-      purchase: "", 
+      purchase: "",
       viewedProduct: "",
       cartStatus: "",
       serviceActivity: "",
       visitorError: "",
       searchContent: ""
-  }),
-    responseTime: this.fb.group({ 
-      from: "", 
-      to: "" 
-    }), // Either the "from" or "to" field is mandatory
+    }),
+    responseTime: this.fb.group({
+      from: this.fb.group({
+        hour: "",
+        minute: "",
+        period: "",
+        date: ""
+      }),
+      to: this.fb.group({
+        hour: "",
+        minute: "",
+        period: "",
+        date: ""
+      })
+    }),
     contentToRetrieve: "",
-    latestUpdateTime: "",
-    nps: this.fb.group({ 
-      from: "", 
-      to: "" 
+    latestUpdateTime: this.fb.group({
+      from: this.fb.group({
+        hour: "",
+        minute: "",
+        period: "",
+        date: ""
+      })
+    }),
+    nps: this.fb.group({
+      from: "",
+      to: ""
     }),
     questionBrick: "",
     invalidFreeTextAnswer: "",
     surveyBotConversations: "",
     surveyIds: "",
     fcr: "",
-    questionTypeAndFormatToRetrieve: this.fb.group({ 
-      type: "", 
-      format: "" 
+    questionTypeAndFormatToRetrieve: this.fb.group({
+      type: "",
+      format: ""
     }),
     answerText: "",
     intentName: "",
@@ -115,26 +144,24 @@ export class MsgIntQueryComponent implements OnInit {
       questionKeywords: "",
       answerKeywords: "",
       surveyId: ""
-  })
-};
+    })
+  };
   templateParam = {
     limit: 50,
     offset: 0,
-    sort: "start:desc"
+    sort: ""
   };
   queryForm: FormGroup;
   paramForm: FormGroup;
   data: any;
 
-  constructor(private dataService: GetDataService, private fb: FormBuilder) {
+  constructor(private dataService: GetDataService, private fb: FormBuilder) {}
+
+  ngOnInit() {
     this.createParamForm();
     this.createQueryForm();
     this.onValueChanged();
-  }
-
-  ngOnInit() {
     this.dataService.getSkills().subscribe((skills: any) => {
-      // console.log(skills);
       let vals = skills.map(skill => {
         return { name: `${skill.id} (${skill.name})`, value: skill.id };
       });
@@ -143,7 +170,6 @@ export class MsgIntQueryComponent implements OnInit {
     });
 
     this.dataService.getAgents().subscribe((agents: any) => {
-      // console.log(agents);
       let vals = agents.map(agent => {
         return { name: `${agent.id} (${agent.loginName})`, value: agent.id };
       });
@@ -153,7 +179,7 @@ export class MsgIntQueryComponent implements OnInit {
   }
 
   createParamForm() {
-    this.paramForm = this.fb.group(this.templateParam)
+    this.paramForm = this.fb.group(this.templateParam);
     this.paramForm.valueChanges.subscribe(data => this.onValueChanged(data));
   }
 
@@ -175,7 +201,8 @@ export class MsgIntQueryComponent implements OnInit {
         },
         error => {
           console.log(error);
-          this.errMess = "The query was unsuccessful due to incorrect data or data type"
+          this.errMess =
+            "The query was unsuccessful due to incorrect data or data type";
         }
       );
   }
@@ -197,8 +224,10 @@ export class MsgIntQueryComponent implements OnInit {
     let serialized = {};
     for (let key in formValue) {
       let value = formValue[key];
-      if(key == "sort") {
-        value ? serialized[key] = `start:${value}` : serialized[key] = `start:desc`
+      if (key == "sort") {
+        value
+          ? (serialized[key] = `start:${value}`)
+          : (serialized[key] = `start:desc`);
       } else {
         serialized[key] = value;
       }
@@ -207,62 +236,122 @@ export class MsgIntQueryComponent implements OnInit {
   }
 
   serializeQueryForm(formValue) {
-    let serialized = {}
-    // for (let key in formValue) {
-    //   let value = formValue[key];
-    //   // start, duration, chatMCS, coBrowseDuration, keyword_search_area
-    //   if (typeof value == "object") {
-    //     if (value.from) {
-    //       // start
-    //       if (typeof value.from == "object") {
-    //         if (!value.from.date || !value.to.date) {
-    //           serialized[key] = { from: Date.now() - 60000 * 60 * 24 * 30, to: Date.now() };
-    //         } else {
-    //           serialized[key] = {
-    //             from: new Date(
-    //             `${JSON.stringify(value.from.date).substring(0, 11)} ${value.from.hour ? value.from.hour + ":" + value.from.minute + " " + value.from.period : ""}`
-    //           ).valueOf(),
-    //           to: new Date(
-    //             `${JSON.stringify(value.to.date).substring(0, 11)} ${value.to.hour ? value.to.hour + ":" + value.to.minute + " " + value.from.period : ""}`
-    //           ).valueOf()
-    //           };
-    //         }
-    //       }
-    //       // duration, chatMCS, coBrowseDuration
-    //       if (typeof value.from != "object") {
-    //         if (value.from && value.to) {
-    //           serialized[key] = { from: Number(value.from), to: Number(value.to)};
-    //         }
-    //       }
-    //     }
-    //     // keyword_search_area
-    //     else if (key === "keyword_search_area") {
-    //       if(value.type) {
-    //         serialized[key] = { type: value.type.split(/,\s*/) }
-    //       }
-    //     }
-    //   } else if (
-    //     key == "agentIds" ||
-    //     key == "agentGroupIds" ||
-    //     key == "skillIds" ||
-    //     key == "lineContentTypes" ||
-    //     key == "alertedMcsValues"
-    //   ) {
-    //     if (value) {
-    //       // agentIds, agentGroupIds, skillIds
-    //       if (key != "lineContentTypes" && key != "alertedMcsValues") {
-    //         serialized[key] = value.split(/,\s*/).map(x => Number(x));
-    //       }
-    //       else {
-    //         // lineContentTypes, alertedMcsValues
-    //         serialized[key] = Array(value);
-    //       }
-    //     }
-    //   } 
-    //   else if(value) {
-    //     serialized[key] = value;
-    //   }
-    // }
+    let serialized = {};
+    for (let key in formValue) {
+      let value = formValue[key];
+      // start, duration, chatMCS, coBrowseDuration, keyword_search_area
+      if (typeof value == "object") {
+        if (value.from) {
+          // start, end, responseTime,
+          if (typeof value.from == "object") {
+            if (!value.from.date || !value.to.date) {
+              if (key == "start") {
+                serialized[key] = {
+                  from: Date.now() - 60000 * 60 * 24 * 30,
+                  to: Date.now()
+                };
+              }
+            } else {
+              if (key == "latestUpdateTime") {
+                serialized[key] = {
+                  from: new Date(
+                    `${JSON.stringify(value.from.date).substring(0, 11)} ${
+                      value.from.hour
+                        ? value.from.hour +
+                          ":" +
+                          value.from.minute +
+                          " " +
+                          value.from.period
+                        : ""
+                    }`
+                  ).valueOf()
+                };
+              } else {
+                serialized[key] = {
+                  from: new Date(
+                    `${JSON.stringify(value.from.date).substring(0, 11)} ${
+                      value.from.hour
+                        ? value.from.hour +
+                          ":" +
+                          value.from.minute +
+                          " " +
+                          value.from.period
+                        : ""
+                    }`
+                  ).valueOf(),
+                  to: new Date(
+                    `${JSON.stringify(value.to.date).substring(0, 11)} ${
+                      value.to.hour
+                        ? value.to.hour +
+                          ":" +
+                          value.to.minute +
+                          " " +
+                          value.from.period
+                        : ""
+                    }`
+                  ).valueOf()
+                };
+              }
+            }
+          }
+          // duration, mcs, csat, nps
+          if (typeof value.from != "object") {
+            if (value.from && value.to) {
+              serialized[key] = {
+                from: Number(value.from),
+                to: Number(value.to)
+              };
+            }
+          }
+        }
+        // sdeSearch, questionTypeAndFormatToRetrieve, agentSurveySearch
+        else if (!value.from) {
+          if (key == "questionTypeAndFormatToRetrieve") {
+            if (value.type && value.format) {
+              serialized[key] = { type: value.type, format: value.format };
+            }
+          } else if (key == "sdeSearch") {
+            for (let sde in value) {
+              if (value[sde]) {
+                if (!serialized[key]) serialized[key] = {};
+                serialized[key][sde] = value[sde];
+              }
+            }
+          } else if (key == "agentSurveySearch") {
+            for (let item in value) {
+              if (value[item]) {
+                if (!serialized[key]) serialized[key] = {};
+                serialized[key][item] = value[item].split(/,\s*/);
+              }
+            }
+          }
+        }
+      } else if (
+        key == "agentIds" ||
+        key == "latestAgentIds" ||
+        key == "skillIds" ||
+        key == "latestSkillIds" ||
+        key == "agentGroupIds" ||
+        key == "alertedMcsValues" ||
+        key == "source" ||
+        key == "device" ||
+        key == "messageContentTypes" ||
+        key == "surveyIds" ||
+        key == "fcr" ||
+        key == "answerText" ||
+        key == "intentName"
+      ) {
+        if (value) {
+          serialized[key] = value.split(/,\s*/);
+        }
+      } else if (key == "intentConfidenceScore") {
+        if (value) {
+          serialized[key] = Number(value);
+        }
+      } else if (value) {
+        serialized[key] = value;
+      }
+    }
     return serialized;
   }
 }

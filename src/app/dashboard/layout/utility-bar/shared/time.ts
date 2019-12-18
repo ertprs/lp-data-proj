@@ -2,6 +2,7 @@ export const eh_time = {
   times: [
     {
       name: "Start",
+      formGroupName: "start",
       description: "Start Time Range"
     }
   ],
@@ -37,9 +38,18 @@ export const eh_time = {
 export const mih_time = {
   times: [
     ...eh_time.times,
-    { name: "End", description: "End Time Range"},
-    { name: "Response Time", description: "Response Time Range (Requires: status[open] contentToRetrieve[responseTime])" },
-    { name: "Latest Update Time", description: "Latest Update Time [Requires 'Status' Data]"}
+    { name: "End", description: "End Time Range", formGroupName: "end" },
+    {
+      name: "Response Time",
+      description:
+        "Response Time Range (Requires: status[open] contentToRetrieve[responseTime])",
+      formGroupName: "responseTime"
+    },
+    {
+      name: "Latest Update Time",
+      description: "Latest Update Time (Requires: status[open, close])",
+      formGroupName: "latestUpdateTime"
+    }
   ],
   body: eh_time.body
 };

@@ -1,17 +1,18 @@
 <div class="dashboard" fxLayout="column" fxLayoutAlign="space-between center">
   <app-utility-bar></app-utility-bar>
   <nav mat-tab-nav-bar fxLayout="row">
-        <span *ngFor="let link of navLinks" fxLayoutAlign="center center"><a
-      mat-tab-link
-      
-      [routerLink]="link.link"
-      routerLinkActive
-      #rla="routerLinkActive"
-      [active]="rla.isActive"
-    >
-    <mat-icon aria-hidden="false">{{ link.icon }}</mat-icon> {{ link.label }}
-    </a>
-</span>
+    <span *ngFor="let link of navLinks" fxLayoutAlign="center center"
+      ><a
+        mat-tab-link
+        [routerLink]="link.link"
+        routerLinkActive
+        #rla="routerLinkActive"
+        [active]="rla.isActive"
+      >
+        <mat-icon aria-hidden="false">{{ link.icon }}</mat-icon>
+        {{ link.label }}
+      </a>
+    </span>
   </nav>
 
   <div

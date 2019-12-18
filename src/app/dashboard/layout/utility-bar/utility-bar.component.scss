@@ -1,68 +1,72 @@
-$bg-primary: #FB8C00;
+$bg-primary: #fb8c00;
+
+.close {
+  color: white;
+}
+
+.drawer {
+  position: fixed;
+  z-index: 200;
+  padding: 75px 10px 75px 10px;
+  height: 100vh;
+  width: 60%;
+  min-width: 25%;
+  border-right: 1px solid #ccc;
+  background-color: #222;
+}
+
+.error {
+  color: red;
+  background: white;
+}
 
 .example-container {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: auto;
-    z-index: 90;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: auto;
+  z-index: 90;
+}
+
+.keywordSearch mat-form-field {
+  width: 100%;
+}
+
+mat-expansion-panel {
+  margin: 5px;
+}
+
+mat-form-field {
+  margin: 5px;
+}
+
+mat-icon {
+  color: #222;
+  padding: 10px;
+}
+
+mat-radio-button {
+  padding: 10px;
+}
+
+.note {
+  color: white;
+  margin: 5px;
+}
+
+.search-button,
+.reset-button {
+  color: #222;
+  background: white;
+  margin: 5px;
 }
 
 .sidenav {
-    background: $bg-primary;
-    padding-top: 75px;
+  background: $bg-primary;
+  padding-top: 75px;
 }
 
-.close {
-    color: white;
-  }
-  
-  .drawer {
-    position: fixed;
-    z-index: 200;
-    padding: 75px 10px 75px 10px;
-    height: 100vh;
-    width: 50%;
-    min-width: 25%;
-    border-right: 1px solid #ccc;
-    // background-color: rgb(35, 70, 94);
-    background-color: #222;
-  }
-  
-  .error {
-      color: red;
-      background: white;
-  }
-  
-  .keywordSearch mat-form-field {
-    width: 100%;
-  }
-  
-  mat-expansion-panel {
-      margin: 5px;
-  }
-  
-  mat-form-field {
-    margin: 5px;
-  }
-  
-  mat-icon {
-    color: #222;
-    padding: 10px;
-  }
-  
-  .note {
-    color: white;
-    margin: 5px;
-  }
-  
-  .search-button, .reset-button {
-      color: #222;
-      background: white;
-      margin: 5px;
-  }
-  
-  .startTime mat-form-field {
-    width: 120px;
-  }
+.startTime mat-form-field {
+  width: 120px;
+}

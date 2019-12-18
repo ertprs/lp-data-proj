@@ -5,8 +5,16 @@ export const mih_double_select = {
     class: "question-type-format",
     formGroupName: "questionTypeAndFormatToRetrieve",
     sets: [
-        { placeholder: "Type", values: [ "custom", "csat", "nps", "fcr" ], formControlName: "type" },
-        { placeholder: "Format", values: [ "single", "open" ], formControlName: "format" }
+      {
+        placeholder: "Type",
+        values: ["custom", "csat", "nps", "fcr"],
+        formControlName: "type"
+      },
+      {
+        placeholder: "Format",
+        values: ["single", "open"],
+        formControlName: "format"
+      }
     ]
   }
 };
