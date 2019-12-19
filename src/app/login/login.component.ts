@@ -96,8 +96,8 @@ export class LoginComponent implements OnInit {
       (bearer: any) => {
         console.log(bearer);
         if(isPlatformBrowser(this.platformId)){
-          this.windowRefService.nativeWindow.sessionStorage.setItem("bearer", bearer.bearer);
-          this.windowRefService.nativeWindow.sessionStorage.setItem("accountId", this.loginForm.value.account);
+          localStorage.setItem("bearer", bearer.bearer);
+          localStorage.setItem("accountId", this.loginForm.value.account);
         }
         // sessionStorage.setItem("bearer", bearer.bearer);
         // sessionStorage.setItem("accountId", this.loginForm.value.account);
@@ -110,8 +110,8 @@ export class LoginComponent implements OnInit {
       },
       error => {
         if(isPlatformBrowser(this.platformId)){
-          this.windowRefService.nativeWindow.sessionStorage.setItem("bearer", "");
-          this.windowRefService.nativeWindow.sessionStorage.setItem("accountId", "");
+          localStorage.setItem("bearer", "");
+          localStorage.setItem("accountId", "");
         }
         this.onValueChanged("invalid");
       }

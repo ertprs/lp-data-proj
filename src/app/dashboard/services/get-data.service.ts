@@ -1,8 +1,9 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnInit, Inject, PLATFORM_ID } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, BehaviorSubject } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { ProcessHttpmsgService } from "src/app/services/process-httpmsg.service";
+import { isPlatformBrowser } from '@angular/common';
 
 let baseURL = `http://localhost:4200/`;
 @Injectable({
@@ -16,15 +17,20 @@ export class GetDataService {
 
   constructor(
     private http: HttpClient,
-    private processhttp: ProcessHttpmsgService
+    private processhttp: ProcessHttpmsgService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   public getEngHistoryData(body: {
     params: { offset?: number; limit?: number; sort?: string };
     payload;
   }): Observable<any> {
-    let bearer = sessionStorage.getItem("bearer");
-    let accountId = sessionStorage.getItem("accountId");
+    let bearer;
+    let accountId;
+    if (isPlatformBrowser(this.platformId)) {
+    bearer = localStorage.getItem("bearer");
+    accountId = localStorage.getItem("accountId");
+    }
     console.log(
       "from data history service:",
       JSON.stringify(accountId),
@@ -48,8 +54,12 @@ export class GetDataService {
     params: { offset?: number; limit?: number; sort?: string };
     payload;
   }): Observable<any> {
-    let bearer = sessionStorage.getItem("bearer");
-    let accountId = sessionStorage.getItem("accountId");
+    let bearer;
+    let accountId;
+    if (isPlatformBrowser(this.platformId)) {
+    bearer = localStorage.getItem("bearer");
+    accountId = localStorage.getItem("accountId");
+    }
     console.log(
       "from msg int history service:",
       JSON.stringify(accountId),
@@ -70,8 +80,12 @@ export class GetDataService {
   }
 
   public getSkills(): Observable<any> {
-    let bearer = sessionStorage.getItem("bearer");
-    let accountId = sessionStorage.getItem("accountId");
+    let bearer;
+    let accountId;
+    if (isPlatformBrowser(this.platformId)) {
+    bearer = localStorage.getItem("bearer");
+    accountId = localStorage.getItem("accountId");
+    }
     return this.http
       .get(
         `${baseURL}api/contact-center/skills/${accountId}/${bearer}`
@@ -80,8 +94,12 @@ export class GetDataService {
   }
 
   public getAgentGroups(): Observable<any> {
-    let bearer = sessionStorage.getItem("bearer");
-    let accountId = sessionStorage.getItem("accountId");
+    let bearer;
+    let accountId;
+    if (isPlatformBrowser(this.platformId)) {
+    bearer = localStorage.getItem("bearer");
+    accountId = localStorage.getItem("accountId");
+    }
     return this.http
       .get(
         `${baseURL}api/contact-center/agentGroups/${accountId}/${bearer}`
@@ -90,8 +108,12 @@ export class GetDataService {
   }
 
   public getAgents(): Observable<any> {
-    let bearer = sessionStorage.getItem("bearer");
-    let accountId = sessionStorage.getItem("accountId");
+    let bearer;
+    let accountId;
+    if (isPlatformBrowser(this.platformId)) {
+    bearer = localStorage.getItem("bearer");
+    accountId = localStorage.getItem("accountId");
+    }
     return this.http
       .get(
         `${baseURL}api/contact-center/agents/${accountId}/${bearer}`

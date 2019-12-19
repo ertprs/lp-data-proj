@@ -34,7 +34,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      let bearer = this.windowRefService.nativeWindow.sessionStorage.getItem(
+      let bearer = localStorage.getItem(
         "bearer"
       );
       if (bearer) {
@@ -56,8 +56,8 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     if (isPlatformBrowser(this.platformId)) {
-      this.windowRefService.nativeWindow.sessionStorage.setItem("bearer", "");
-      this.windowRefService.nativeWindow.sessionStorage.setItem(
+      localStorage.setItem("bearer", "");
+      localStorage.setItem(
         "accountId",
         ""
       );

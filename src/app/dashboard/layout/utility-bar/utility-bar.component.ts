@@ -20,8 +20,8 @@ export class UtilityBarComponent implements OnInit {
 
   logout() {
     if (isPlatformBrowser(this.platformId)) {
-      this.windowRefService.nativeWindow.sessionStorage.setItem("bearer", "");
-      this.windowRefService.nativeWindow.sessionStorage.setItem(
+      localStorage.setItem("bearer", "");
+      localStorage.setItem(
         "accountId",
         ""
       );

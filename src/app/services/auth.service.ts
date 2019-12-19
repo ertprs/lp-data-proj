@@ -17,7 +17,7 @@ export class AuthService {
     let bearer;
     if (isPlatformBrowser(this.platformId)) {
       console.log("checked whether it is authenticated");
-      bearer = this.windowRefService.nativeWindow.sessionStorage.getItem(
+      bearer = localStorage.getItem(
         "bearer"
       );
       console.log(bearer);
