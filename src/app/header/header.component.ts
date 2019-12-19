@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Inject, PLATFORM_ID, Input, ChangeDetectorRef } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { ActivatedRoute, Router } from "@angular/router";
 @Component({
   selector: "app-header",
@@ -9,18 +10,33 @@ export class HeaderComponent implements OnInit {
   @Input()
   loggedIn: boolean = false;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private changeDetector: ChangeDetectorRef
+  ) {
+    this.changeDetector.detach();
+    setInterval(() => {
+      this.changeDetector.detectChanges();
+    }, 5000);
+  }
 
   ngOnInit() {
-    if (sessionStorage.bearer) {
-      this.loggedIn = true;
+    if (isPlatformBrowser(this.platformId)) {
+      let bearer = localStorage.getItem("bearer");
+      if (bearer) {
+        this.loggedIn = true;
+      }
     }
   }
 
   logout() {
-    sessionStorage.setItem("bearer", "");
-    sessionStorage.setItem("accountId", "");
-    this.loggedIn = false;
-    this.router.navigate(["/home"]);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem("bearer", "");
+      localStorage.setItem("accountId", "");
+      this.loggedIn = false;
+      this.router.navigate(["/home"]);
+    }
   }
 }

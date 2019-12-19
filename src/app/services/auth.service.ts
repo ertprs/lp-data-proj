@@ -1,21 +1,21 @@
-import { Injectable } from '@angular/core';
-
+import { Inject, PLATFORM_ID, Injectable } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class AuthService {
-
-  constructor() { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   public isAuthenticated() {
-    console.log("checked whether it is authenticated")
-    let bearer = sessionStorage.getItem('bearer');
-    console.log(bearer)
-    if(bearer){
-      return true;
-    }
-    else {
-      return false;
+    console.log("checked whether it is authenticated");
+    if (isPlatformBrowser(this.platformId)) {
+      let bearer = localStorage.getItem("bearer");
+      console.log(bearer);
+      if (bearer) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 }

@@ -1,4 +1,5 @@
-import { Injectable } from "@angular/core";
+import { Inject, PLATFORM_ID, Injectable } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Observable, BehaviorSubject } from "rxjs";
 import { catchError, map } from "rxjs/operators";
@@ -9,8 +10,6 @@ let baseURL = `http://localhost:4200/`;
   providedIn: "root"
 })
 export class GetDataService {
-  bearer: string = sessionStorage.getItem("bearer");
-  accountId: string = sessionStorage.getItem("accountId");
   private engHistData = new BehaviorSubject<any>({});
   private msgIntHistData = new BehaviorSubject<any>({});
   currentEngHist = this.engHistData.asObservable();
@@ -18,22 +17,29 @@ export class GetDataService {
 
   constructor(
     private http: HttpClient,
-    private processhttp: ProcessHttpmsgService
+    private processhttp: ProcessHttpmsgService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   public getEngHistoryData(body: {
     params: { offset?: number; limit?: number; sort?: string };
     payload;
   }): Observable<any> {
+    let bearer;
+    let accountId;
+    if(isPlatformBrowser(this.platformId)){
+      bearer = localStorage.getItem("bearer");
+      accountId = localStorage.getItem("accountId")
+    }
     console.log(
       "from data history service:",
-      JSON.stringify(this.accountId),
-      JSON.stringify(this.bearer)
+      JSON.stringify(accountId),
+      JSON.stringify(bearer)
     );
     
     return this.http
       .post(
-        `${baseURL}api/data-history/engHistory/${this.accountId}/${this.bearer}`,
+        `${baseURL}api/data-history/engHistory/${accountId}/${bearer}`,
         body
       )
       .pipe(map(response => {
@@ -48,14 +54,20 @@ export class GetDataService {
     params: { offset?: number; limit?: number; sort?: string };
     payload;
   }): Observable<any> {
+    let bearer;
+    let accountId;
+    if(isPlatformBrowser(this.platformId)){
+      bearer = localStorage.getItem("bearer");
+      accountId = localStorage.getItem("accountId")
+    }
     console.log(
       "from msg int history service:",
-      JSON.stringify(this.accountId),
-      JSON.stringify(this.bearer)
+      JSON.stringify(accountId),
+      JSON.stringify(bearer)
     );
     return this.http
       .post(
-        `${baseURL}api/data-history/msgIntHistory/${this.accountId}/${this.bearer}`,
+        `${baseURL}api/data-history/msgIntHistory/${accountId}/${bearer}`,
         body
       )
       .pipe(map(response => {
@@ -68,25 +80,43 @@ export class GetDataService {
   }
 
   public getSkills(): Observable<any> {
+    let bearer;
+    let accountId;
+    if(isPlatformBrowser(this.platformId)){
+      bearer = localStorage.getItem("bearer");
+      accountId = localStorage.getItem("accountId")
+    }
     return this.http
       .get(
-        `${baseURL}api/contact-center/skills/${this.accountId}/${this.bearer}`
+        `${baseURL}api/contact-center/skills/${accountId}/${bearer}`
       )
       .pipe(catchError(this.processhttp.handleError));
   }
 
   public getAgentGroups(): Observable<any> {
+    let bearer;
+    let accountId;
+    if(isPlatformBrowser(this.platformId)){
+      bearer = localStorage.getItem("bearer");
+      accountId = localStorage.getItem("accountId")
+    }
     return this.http
       .get(
-        `${baseURL}api/contact-center/agentGroups/${this.accountId}/${this.bearer}`
+        `${baseURL}api/contact-center/agentGroups/${accountId}/${bearer}`
       )
       .pipe(catchError(this.processhttp.handleError));
   }
 
   public getAgents(): Observable<any> {
+    let bearer;
+    let accountId;
+    if(isPlatformBrowser(this.platformId)){
+      bearer = localStorage.getItem("bearer");
+      accountId = localStorage.getItem("accountId")
+    }
     return this.http
       .get(
-        `${baseURL}api/contact-center/agents/${this.accountId}/${this.bearer}`
+        `${baseURL}api/contact-center/agents/${accountId}/${bearer}`
       )
       .pipe(catchError(this.processhttp.handleError));
   }

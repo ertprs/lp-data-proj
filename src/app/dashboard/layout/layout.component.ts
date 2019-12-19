@@ -11,16 +11,16 @@ export class LayoutComponent implements OnInit {
   apiType: string;
   navLinks: any[] = [
     {
-      label: " Messaging Interactions History",
-      link: "/dashboard/msg-interactions",
-      index: 0,
-      icon: "pie_chart"
-    },
-    {
       label: " Engagement History",
       link: "/dashboard/engagement-history",
-      index: 1,
+      index: 0,
       icon: "bar_chart"
+    },
+    {
+      label: " Messaging Interactions History",
+      link: "/dashboard/msg-interactions",
+      index: 1,
+      icon: "pie_chart"
     }
   ];
   activeLinkIndex = -1;
@@ -30,12 +30,13 @@ export class LayoutComponent implements OnInit {
   ngOnInit() {
     this.apiType = this.route.snapshot.params["apiType"];
     this.router.events.subscribe(res => {
-      this.activeLinkIndex = this.navLinks.find(tab => {
+      let t = this.navLinks.find(tab => {
         if (tab.link === this.router.url) {
           this.apiType = this.router.url.slice(11);
           return tab;
         }
-      }).index;
+      });
+      if(t) { this.activeLinkIndex = t.index }
     });
   }
 }

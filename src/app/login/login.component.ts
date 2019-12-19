@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Inject, PLATFORM_ID, Input } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { LoginService } from "../services/login.service";
 import { Router } from "@angular/router";
@@ -39,7 +40,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private loginService: LoginService,
-    private router: Router
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
@@ -66,7 +68,6 @@ export class LoginComponent implements OnInit {
     for (const field in this.formErrors) {
       if (this.formErrors.hasOwnProperty(field)) {
         // clear previous error message (if any)
-        console.log("Form Error Own Properties: ", this.formErrors);
         this.formErrors[field] = "";
         const control = form.get(field);
         if (control && control.dirty && !control.valid) {
@@ -91,17 +92,21 @@ export class LoginComponent implements OnInit {
     this.loginService.login(this.loginForm.value).subscribe(
       (bearer: any) => {
         console.log(bearer);
-        sessionStorage.setItem("bearer", bearer.bearer);
-        sessionStorage.setItem("accountId", this.loginForm.value.account);
-        this.loginForm.reset({
-          account: "",
-          username: "",
-          password: ""
-        });
-        this.router.navigate(["/dashboard/engagement-history"]);
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem("bearer", bearer.bearer);
+          localStorage.setItem("accountId", this.loginForm.value.account);
+          this.loginForm.reset({
+            account: "",
+            username: "",
+            password: ""
+          });
+          this.router.navigate(["/dashboard/engagement-history"]);
+        }
       },
       error => {
-        sessionStorage.setItem("bearer", "");
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem("bearer", "");
+        }
         this.onValueChanged("invalid");
       }
     );
