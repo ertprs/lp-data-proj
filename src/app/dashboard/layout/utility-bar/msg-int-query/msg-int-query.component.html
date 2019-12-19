@@ -19,7 +19,6 @@
       </div>
     </div>
     <form [formGroup]="paramForm">
-      
       <mat-accordion>
         <mat-expansion-panel>
           <mat-expansion-panel-header class="space-between">
@@ -91,7 +90,6 @@
                   matInput
                   [matDatepicker]="picker"
                   placeholder="Choose a date"
-                  
                   formControlName="date"
                 />
                 <mat-datepicker-toggle
@@ -365,8 +363,8 @@
         </mat-expansion-panel>
       </mat-accordion>
       <mat-error *ngIf="errMess" class="error">
-            {{ errMess }}
-          </mat-error>
+        {{ errMess }}
+      </mat-error>
       <div fxLayout="row" fxLayoutAlign="end center">
         <button class="search-button" type="submit" mat-button>
           Search

@@ -36,7 +36,7 @@ export class LayoutComponent implements OnInit {
           return tab;
         }
       });
-      if(t) { this.activeLinkIndex = t.index; }
+      if(t) { this.activeLinkIndex = t.index }
     });
   }
 }

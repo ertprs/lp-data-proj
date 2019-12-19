@@ -38,7 +38,11 @@ export const eh_time = {
 export const mih_time = {
   times: [
     ...eh_time.times,
-    { name: "End", description: "End Time Range - Limited to Last 30 Days", formGroupName: "end" },
+    {
+      name: "End",
+      description: "End Time Range - Limited to Last 30 Days",
+      formGroupName: "end"
+    },
     {
       name: "Response Time",
       description:

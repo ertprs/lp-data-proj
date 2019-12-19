@@ -1,9 +1,9 @@
-import { Component, PLATFORM_ID, OnInit, Input, Inject } from "@angular/core";
-import { DOCUMENT, isPlatformBrowser, isPlatformServer } from "@angular/common";
+
+import { Component, OnInit, Inject, PLATFORM_ID, Input } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { LoginService } from "../services/login.service";
 import { Router } from "@angular/router";
-import { WindowRefService } from "../services/window-ref.service";
 
 @Component({
   selector: "app-login",
@@ -39,12 +39,10 @@ export class LoginComponent implements OnInit {
   };
 
   constructor(
-    @Inject(DOCUMENT) private document: Document,
-    @Inject(PLATFORM_ID) private platformId: any,
-    private windowRefService: WindowRefService,
     private fb: FormBuilder,
     private loginService: LoginService,
-    private router: Router
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
@@ -95,23 +93,20 @@ export class LoginComponent implements OnInit {
     this.loginService.login(this.loginForm.value).subscribe(
       (bearer: any) => {
         console.log(bearer);
-        if(isPlatformBrowser(this.platformId)){
+        if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem("bearer", bearer.bearer);
           localStorage.setItem("accountId", this.loginForm.value.account);
+          this.loginForm.reset({
+            account: "",
+            username: "",
+            password: ""
+          });
+          this.router.navigate(["/dashboard/engagement-history"]);
         }
-        // sessionStorage.setItem("bearer", bearer.bearer);
-        // sessionStorage.setItem("accountId", this.loginForm.value.account);
-        this.loginForm.reset({
-          account: "",
-          username: "",
-          password: ""
-        });
-        this.router.navigate(["/dashboard/engagement-history"]);
       },
       error => {
-        if(isPlatformBrowser(this.platformId)){
+        if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem("bearer", "");
-          localStorage.setItem("accountId", "");
         }
         this.onValueChanged("invalid");
       }

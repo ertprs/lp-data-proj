@@ -4,6 +4,12 @@ import { Label, Color } from "ng2-charts";
 import { GetDataService } from "../../services/get-data.service";
 import { Subscription } from "rxjs";
 
+let params = {
+  offset: 0,
+  limit: 50,
+  sort: "start:desc"
+};
+
 let payload = {
   interactive: true,
   ended: true,
@@ -11,11 +17,6 @@ let payload = {
     from: Date.now() - 60000 * 60 * 24 * 30,
     to: Date.now()
   }
-};
-let params = {
-  offset: 0,
-  limit: 50,
-  sort: "start:desc"
 };
 @Component({
   selector: "app-eng-hist",
@@ -128,22 +129,25 @@ export class EngHistComponent implements OnInit {
   public lineChartPlugins = [];
 
   constructor(private dataService: GetDataService) {
-    this.dataService.getEngHistoryData({ params, payload }).subscribe(
-      (response: any) => {
-        let res = this.agentAverageScores(response);
-        this.data = response;
-        this.barChartData[0].data = res.mcsScores;
-        this.barChartData[1].data = res.convos;
-        this.barChartLabels = res.agents;
-        this.lineChartData = [
-          {
-            data: res.lineChartResults,
-            label: "mcs"
-          }
-        ];
-      },
-      err => `Observer received an error`
-    );
+    this.dataService
+      .getEngHistoryData({ params, payload })
+      .subscribe(
+        (response: any) => {
+          console.log(response);
+          let res = this.agentAverageScores(response);
+          this.data = response;
+          this.barChartData[0].data = res.mcsScores;
+          this.barChartData[1].data = res.convos;
+          this.barChartLabels = res.agents;
+          this.lineChartData = [
+            {
+              data: res.lineChartResults,
+              label: "mcs"
+            }
+          ];
+        },
+        err => `Observer received an error`
+      );
   }
 
   ngOnInit() {

@@ -4,11 +4,9 @@ import {
   Input,
   PLATFORM_ID,
   Inject,
-  ChangeDetectorRef
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { DOCUMENT, isPlatformBrowser, isPlatformServer } from "@angular/common";
-import { WindowRefService } from "../services/window-ref.service";
+import { isPlatformBrowser } from "@angular/common";
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",
@@ -19,18 +17,10 @@ export class HeaderComponent implements OnInit {
   loggedIn: boolean = false;
 
   constructor(
-    @Inject(DOCUMENT) private document: Document,
     @Inject(PLATFORM_ID) private platformId: any,
-    private windowRefService: WindowRefService,
     private route: ActivatedRoute,
     private router: Router,
-    private changeDetector: ChangeDetectorRef
-  ) {
-    changeDetector.detach();
-    setInterval(() => {
-      this.changeDetector.detectChanges();
-    }, 1000);
-  }
+  ) {}
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {

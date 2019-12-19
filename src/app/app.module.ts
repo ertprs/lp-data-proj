@@ -7,7 +7,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -47,7 +46,6 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     BrowserAnimationsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatPasswordStrengthModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

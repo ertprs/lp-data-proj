@@ -1,7 +1,6 @@
-import { Component, PLATFORM_ID, Inject, OnInit } from "@angular/core";
+import { Component, OnInit, Inject, PLATFORM_ID } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { Router } from "@angular/router";
-import { DOCUMENT, isPlatformBrowser, isPlatformServer } from "@angular/common";
-import { WindowRefService } from "src/app/services/window-ref.service";
 
 @Component({
   selector: "app-utility-bar",
@@ -10,10 +9,8 @@ import { WindowRefService } from "src/app/services/window-ref.service";
 })
 export class UtilityBarComponent implements OnInit {
   constructor(
-    @Inject(DOCUMENT) private document: Document,
-    @Inject(PLATFORM_ID) private platformId: any,
-    private windowRefService: WindowRefService,
-    private router: Router
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {}
@@ -21,10 +18,7 @@ export class UtilityBarComponent implements OnInit {
   logout() {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem("bearer", "");
-      localStorage.setItem(
-        "accountId",
-        ""
-      );
+      localStorage.setItem("accountId", "");
       this.router.navigate(["/home"]);
     }
   }

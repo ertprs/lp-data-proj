@@ -1,9 +1,9 @@
-import { Injectable, OnInit, Inject, PLATFORM_ID } from "@angular/core";
+import { Inject, PLATFORM_ID, Injectable } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Observable, BehaviorSubject } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { ProcessHttpmsgService } from "src/app/services/process-httpmsg.service";
-import { isPlatformBrowser } from '@angular/common';
 
 let baseURL = `http://localhost:4200/`;
 @Injectable({
@@ -27,9 +27,10 @@ export class GetDataService {
   }): Observable<any> {
     let bearer;
     let accountId;
-    if (isPlatformBrowser(this.platformId)) {
-    bearer = localStorage.getItem("bearer");
-    accountId = localStorage.getItem("accountId");
+
+    if(isPlatformBrowser(this.platformId)){
+      bearer = localStorage.getItem("bearer");
+      accountId = localStorage.getItem("accountId")
     }
     console.log(
       "from data history service:",
@@ -56,9 +57,9 @@ export class GetDataService {
   }): Observable<any> {
     let bearer;
     let accountId;
-    if (isPlatformBrowser(this.platformId)) {
-    bearer = localStorage.getItem("bearer");
-    accountId = localStorage.getItem("accountId");
+    if(isPlatformBrowser(this.platformId)){
+      bearer = localStorage.getItem("bearer");
+      accountId = localStorage.getItem("accountId")
     }
     console.log(
       "from msg int history service:",
@@ -82,9 +83,9 @@ export class GetDataService {
   public getSkills(): Observable<any> {
     let bearer;
     let accountId;
-    if (isPlatformBrowser(this.platformId)) {
-    bearer = localStorage.getItem("bearer");
-    accountId = localStorage.getItem("accountId");
+    if(isPlatformBrowser(this.platformId)){
+      bearer = localStorage.getItem("bearer");
+      accountId = localStorage.getItem("accountId")
     }
     return this.http
       .get(
@@ -96,9 +97,9 @@ export class GetDataService {
   public getAgentGroups(): Observable<any> {
     let bearer;
     let accountId;
-    if (isPlatformBrowser(this.platformId)) {
-    bearer = localStorage.getItem("bearer");
-    accountId = localStorage.getItem("accountId");
+    if(isPlatformBrowser(this.platformId)){
+      bearer = localStorage.getItem("bearer");
+      accountId = localStorage.getItem("accountId")
     }
     return this.http
       .get(
@@ -110,9 +111,9 @@ export class GetDataService {
   public getAgents(): Observable<any> {
     let bearer;
     let accountId;
-    if (isPlatformBrowser(this.platformId)) {
-    bearer = localStorage.getItem("bearer");
-    accountId = localStorage.getItem("accountId");
+    if(isPlatformBrowser(this.platformId)){
+      bearer = localStorage.getItem("bearer");
+      accountId = localStorage.getItem("accountId")
     }
     return this.http
       .get(
