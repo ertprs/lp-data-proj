@@ -134,7 +134,6 @@ export class MsgIntHistComponent implements OnInit {
       .getMsgIntHistoryData({ params, payload })
       .subscribe(
         (msgIntData: any) => {
-          console.log(msgIntData);
           let response = this.getMsgScoresByAgent(msgIntData);
           this.data = msgIntData;
           this.lineChartData = response.lineResult;

@@ -3,6 +3,7 @@ import { isPlatformBrowser } from "@angular/common";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { LoginService } from "../services/login.service";
 import { Router } from "@angular/router";
+import { WindowRefService } from "../services/window-ref.service";
 
 @Component({
   selector: "app-login",

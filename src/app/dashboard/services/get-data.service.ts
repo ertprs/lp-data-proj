@@ -44,7 +44,7 @@ export class GetDataService {
       )
       .pipe(map(response => {
         this.engHistData.next(response);
-        console.log(response, this.currentEngHist);
+        console.log(response);
         return response;
       }))
       .pipe(catchError(this.processhttp.handleError));
@@ -72,7 +72,7 @@ export class GetDataService {
       )
       .pipe(map(response => {
         this.msgIntHistData.next(response);
-        console.log(response, this.currentMsgInt);
+        console.log(response);
         return response
       }))
       .pipe(catchError(this.processhttp.handleError));

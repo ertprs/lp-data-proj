@@ -9,6 +9,7 @@ let params = {
   limit: 50,
   sort: "start:desc"
 };
+
 let payload = {
   interactive: true,
   ended: true,
@@ -93,7 +94,6 @@ export class EngHistComponent implements OnInit {
             autoSkip: true,
             maxTicksLimit: 12,
             source: "auto"
-
           }
         }
       ],
@@ -152,7 +152,7 @@ export class EngHistComponent implements OnInit {
 
   ngOnInit() {
     this.dataService.currentEngHist.subscribe(data => {
-      console.log(data)
+      console.log(data);
       if (data.interactionHistoryRecords) {
         this.data = data;
         let res = this.agentAverageScores(data);
@@ -176,7 +176,7 @@ export class EngHistComponent implements OnInit {
     data.interactionHistoryRecords.forEach(set => {
       let date = new Date(set.info.startTime);
       lineChartResults.push({
-        x: date,
+        x: date.toUTCString(),
         y: set.info.chatMCS
       });
       if (!result[set.info.agentLoginName]) {
@@ -203,5 +203,4 @@ export class EngHistComponent implements OnInit {
     }
     return allData;
   }
-
 }
