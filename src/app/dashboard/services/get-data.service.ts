@@ -9,8 +9,6 @@ let baseURL = `http://localhost:4200/`;
   providedIn: "root"
 })
 export class GetDataService {
-  bearer: string = sessionStorage.getItem("bearer");
-  accountId: string = sessionStorage.getItem("accountId");
   private engHistData = new BehaviorSubject<any>({});
   private msgIntHistData = new BehaviorSubject<any>({});
   currentEngHist = this.engHistData.asObservable();
@@ -25,20 +23,22 @@ export class GetDataService {
     params: { offset?: number; limit?: number; sort?: string };
     payload;
   }): Observable<any> {
+    let bearer = sessionStorage.getItem("bearer");
+    let accountId = sessionStorage.getItem("accountId");
     console.log(
       "from data history service:",
-      JSON.stringify(this.accountId),
-      JSON.stringify(this.bearer)
+      JSON.stringify(accountId),
+      JSON.stringify(bearer)
     );
     
     return this.http
       .post(
-        `${baseURL}api/data-history/engHistory/${this.accountId}/${this.bearer}`,
+        `${baseURL}api/data-history/engHistory/${accountId}/${bearer}`,
         body
       )
       .pipe(map(response => {
         this.engHistData.next(response);
-        console.log(response, this.currentEngHist);
+        console.log(response);
         return response;
       }))
       .pipe(catchError(this.processhttp.handleError));
@@ -48,19 +48,21 @@ export class GetDataService {
     params: { offset?: number; limit?: number; sort?: string };
     payload;
   }): Observable<any> {
+    let bearer = sessionStorage.getItem("bearer");
+    let accountId = sessionStorage.getItem("accountId");
     console.log(
       "from msg int history service:",
-      JSON.stringify(this.accountId),
-      JSON.stringify(this.bearer)
+      JSON.stringify(accountId),
+      JSON.stringify(bearer)
     );
     return this.http
       .post(
-        `${baseURL}api/data-history/msgIntHistory/${this.accountId}/${this.bearer}`,
+        `${baseURL}api/data-history/msgIntHistory/${accountId}/${bearer}`,
         body
       )
       .pipe(map(response => {
         this.msgIntHistData.next(response);
-        console.log(response, this.currentMsgInt);
+        console.log(response);
         return response
       }))
       .pipe(catchError(this.processhttp.handleError));
@@ -68,25 +70,31 @@ export class GetDataService {
   }
 
   public getSkills(): Observable<any> {
+    let bearer = sessionStorage.getItem("bearer");
+    let accountId = sessionStorage.getItem("accountId");
     return this.http
       .get(
-        `${baseURL}api/contact-center/skills/${this.accountId}/${this.bearer}`
+        `${baseURL}api/contact-center/skills/${accountId}/${bearer}`
       )
       .pipe(catchError(this.processhttp.handleError));
   }
 
   public getAgentGroups(): Observable<any> {
+    let bearer = sessionStorage.getItem("bearer");
+    let accountId = sessionStorage.getItem("accountId");
     return this.http
       .get(
-        `${baseURL}api/contact-center/agentGroups/${this.accountId}/${this.bearer}`
+        `${baseURL}api/contact-center/agentGroups/${accountId}/${bearer}`
       )
       .pipe(catchError(this.processhttp.handleError));
   }
 
   public getAgents(): Observable<any> {
+    let bearer = sessionStorage.getItem("bearer");
+    let accountId = sessionStorage.getItem("accountId");
     return this.http
       .get(
-        `${baseURL}api/contact-center/agents/${this.accountId}/${this.bearer}`
+        `${baseURL}api/contact-center/agents/${accountId}/${bearer}`
       )
       .pipe(catchError(this.processhttp.handleError));
   }

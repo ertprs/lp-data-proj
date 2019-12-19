@@ -1,7 +1,9 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, PLATFORM_ID, OnInit, Input, Inject } from "@angular/core";
+import { DOCUMENT, isPlatformBrowser, isPlatformServer } from "@angular/common";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { LoginService } from "../services/login.service";
 import { Router } from "@angular/router";
+import { WindowRefService } from "../services/window-ref.service";
 
 @Component({
   selector: "app-login",
@@ -37,6 +39,9 @@ export class LoginComponent implements OnInit {
   };
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
+    @Inject(PLATFORM_ID) private platformId: any,
+    private windowRefService: WindowRefService,
     private fb: FormBuilder,
     private loginService: LoginService,
     private router: Router
@@ -66,7 +71,6 @@ export class LoginComponent implements OnInit {
     for (const field in this.formErrors) {
       if (this.formErrors.hasOwnProperty(field)) {
         // clear previous error message (if any)
-        console.log("Form Error Own Properties: ", this.formErrors);
         this.formErrors[field] = "";
         const control = form.get(field);
         if (control && control.dirty && !control.valid) {
@@ -91,8 +95,12 @@ export class LoginComponent implements OnInit {
     this.loginService.login(this.loginForm.value).subscribe(
       (bearer: any) => {
         console.log(bearer);
-        sessionStorage.setItem("bearer", bearer.bearer);
-        sessionStorage.setItem("accountId", this.loginForm.value.account);
+        if(isPlatformBrowser(this.platformId)){
+          this.windowRefService.nativeWindow.sessionStorage.setItem("bearer", bearer.bearer);
+          this.windowRefService.nativeWindow.sessionStorage.setItem("accountId", this.loginForm.value.account);
+        }
+        // sessionStorage.setItem("bearer", bearer.bearer);
+        // sessionStorage.setItem("accountId", this.loginForm.value.account);
         this.loginForm.reset({
           account: "",
           username: "",
@@ -101,7 +109,10 @@ export class LoginComponent implements OnInit {
         this.router.navigate(["/dashboard/engagement-history"]);
       },
       error => {
-        sessionStorage.setItem("bearer", "");
+        if(isPlatformBrowser(this.platformId)){
+          this.windowRefService.nativeWindow.sessionStorage.setItem("bearer", "");
+          this.windowRefService.nativeWindow.sessionStorage.setItem("accountId", "");
+        }
         this.onValueChanged("invalid");
       }
     );

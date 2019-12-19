@@ -11,7 +11,10 @@ import { mih_single_input } from "../shared/single-input";
 import { mih_multiple_input } from "../shared/multiple-input";
 import { params } from "../shared/params";
 import { mih_double_select } from "../shared/double-select";
-import { mih_serializeQueryForm, mih_serializeParamForm } from '../shared/mih_serializationFns';
+import {
+  mih_serializeQueryForm,
+  mih_serializeParamForm
+} from "../utils/mih_serializationFns";
 
 @Component({
   selector: "app-msg-int-query",
@@ -163,19 +166,23 @@ export class MsgIntQueryComponent implements OnInit {
     this.createQueryForm();
     this.onValueChanged();
     this.dataService.getSkills().subscribe((skills: any) => {
-      let vals = skills.map(skill => {
-        return { name: `${skill.id} (${skill.name})`, value: skill.id };
-      });
-      this.chainedValues.skills.values = vals;
-      this.chainedValues.latestSkills.values = vals;
+      if (skills.length) {
+        let vals = skills.map(skill => {
+          return { name: `${skill.id} (${skill.name})`, value: skill.id };
+        });
+        this.chainedValues.skills.values = vals;
+        this.chainedValues.latestSkills.values = vals;
+      }
     });
 
     this.dataService.getAgents().subscribe((agents: any) => {
-      let vals = agents.map(agent => {
-        return { name: `${agent.id} (${agent.loginName})`, value: agent.id };
-      });
-      this.chainedValues.agents.values = vals;
-      this.chainedValues.latestAgents.values = vals;
+      if (agents.length) {
+        let vals = agents.map(agent => {
+          return { name: `${agent.id} (${agent.loginName})`, value: agent.id };
+        });
+        this.chainedValues.agents.values = vals;
+        this.chainedValues.latestAgents.values = vals;
+      }
     });
   }
 
@@ -198,6 +205,10 @@ export class MsgIntQueryComponent implements OnInit {
       .subscribe(
         (results: any) => {
           console.log(results);
+          if (results.name && results.name == "Error") {
+            this.errMess =
+              "The query was unsuccessful due to incorrect data or data type";
+          }
           this.data = results;
         },
         error => {
@@ -220,5 +231,4 @@ export class MsgIntQueryComponent implements OnInit {
   returnZero() {
     return 0;
   }
-
 }

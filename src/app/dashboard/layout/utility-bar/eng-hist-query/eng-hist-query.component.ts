@@ -7,7 +7,11 @@ import { eh_time } from "../shared/time";
 import { eh_single_input } from "../shared/single-input";
 import { eh_multiple_input } from "../shared/multiple-input";
 import { params } from "../shared/params";
-import { eh_serializeQueryForm, eh_serializeParamForm } from '../shared/eh_serializationFns';
+import {
+  eh_serializeQueryForm,
+  eh_serializeParamForm
+} from "../utils/eh_serializationFns";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-eng-hist-query",
@@ -80,29 +84,43 @@ export class EngHistQueryComponent implements OnInit {
   paramForm: FormGroup;
   data: any;
 
-  constructor(private dataService: GetDataService, private fb: FormBuilder) {
+  constructor(
+    private dataService: GetDataService,
+    private fb: FormBuilder,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
     this.createParamForm();
     this.createQueryForm();
     this.onValueChanged();
-  }
 
-  ngOnInit() {
     this.dataService.getSkills().subscribe((skills: any) => {
-      this.chainedValues.skills.values = skills.map(skill => {
-        return { name: `${skill.id} (${skill.name})`, value: skill.id };
-      });
+      if (skills.length) {
+        this.chainedValues.skills.values = skills.map(skill => {
+          return { name: `${skill.id} (${skill.name})`, value: skill.id };
+        });
+      } else if (skills.name == "Error") {
+        sessionStorage.setItem("bearer", "");
+        sessionStorage.setItem("accountId", "");
+        this.router.navigateByUrl("/login");
+      }
     });
 
     this.dataService.getAgents().subscribe((agents: any) => {
-      this.chainedValues.agents.values = agents.map(agent => {
-        return { name: `${agent.id} (${agent.loginName})`, value: agent.id };
-      });
+      if (agents.length) {
+        this.chainedValues.agents.values = agents.map(agent => {
+          return { name: `${agent.id} (${agent.loginName})`, value: agent.id };
+        });
+      }
     });
 
     this.dataService.getAgentGroups().subscribe((agentGroups: any) => {
-      this.chainedValues.agentGroups.values = agentGroups.map(group => {
-        return { name: `${group.id} (${group.name})`, value: group.id };
-      });
+      if (agentGroups.length) {
+        this.chainedValues.agentGroups.values = agentGroups.map(group => {
+          return { name: `${group.id} (${group.name})`, value: group.id };
+        });
+      }
     });
   }
 
@@ -125,6 +143,10 @@ export class EngHistQueryComponent implements OnInit {
       .subscribe(
         (results: any) => {
           console.log(results);
+          if (results.name && results.name == "Error") {
+            this.errMess =
+              "The query was unsuccessful due to incorrect data or data type";
+          }
           this.data = results;
         },
         error => {

@@ -1,20 +1,30 @@
-import { Injectable } from '@angular/core';
+import { DOCUMENT } from "@angular/common";
+import { PLATFORM_ID, Inject, Injectable } from "@angular/core";
+import { isPlatformBrowser, isPlatformServer } from "@angular/common";
+import { WindowRefService } from "./window-ref.service";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class AuthService {
-
-  constructor() { }
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    @Inject(PLATFORM_ID) private platformId: any,
+    private windowRefService: WindowRefService
+  ) {}
 
   public isAuthenticated() {
-    console.log("checked whether it is authenticated")
-    let bearer = sessionStorage.getItem('bearer');
-    console.log(bearer)
-    if(bearer){
-      return true;
+    let bearer;
+    if (isPlatformBrowser(this.platformId)) {
+      console.log("checked whether it is authenticated");
+      bearer = this.windowRefService.nativeWindow.sessionStorage.getItem(
+        "bearer"
+      );
+      console.log(bearer);
     }
-    else {
+    if (bearer) {
+      return true;
+    } else {
       return false;
     }
   }

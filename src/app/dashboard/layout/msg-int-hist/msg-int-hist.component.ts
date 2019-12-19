@@ -4,6 +4,20 @@ import { Color, Label } from "ng2-charts";
 import { GetDataService } from "../../services/get-data.service";
 import * as moment from "moment";
 import { Subscription } from "rxjs";
+
+let params = {
+  offset: 0,
+  limit: 50,
+  sort: "start:desc"
+};
+let payload = {
+  interactive: true,
+  ended: true,
+  start: {
+    from: Date.now() - 60000 * 60 * 24 * 30,
+    to: Date.now()
+  }
+};
 @Component({
   selector: "app-msg-int-hist",
   templateUrl: "./msg-int-hist.component.html",
@@ -12,19 +26,6 @@ import { Subscription } from "rxjs";
 export class MsgIntHistComponent implements OnInit {
   data;
   subscription: Subscription;
-  params = {
-    offset: 0,
-    limit: 50,
-    sort: "start:desc"
-  };
-  payload = {
-    interactive: true,
-    ended: true,
-    start: {
-      from: Date.now() - 60000 * 60 * 24 * 30,
-      to: Date.now()
-    }
-  };
 
   public lineChartData: ChartDataSets[] = [{ data: [], label: "mcs" }];
   public lineChartLabels: Label[] = [];
@@ -130,10 +131,9 @@ export class MsgIntHistComponent implements OnInit {
 
   constructor(private dataService: GetDataService) {
     this.dataService
-      .getMsgIntHistoryData({ params: this.params, payload: this.payload })
+      .getMsgIntHistoryData({ params, payload })
       .subscribe(
         (msgIntData: any) => {
-          console.log(msgIntData);
           let response = this.getMsgScoresByAgent(msgIntData);
           this.data = msgIntData;
           this.lineChartData = response.lineResult;

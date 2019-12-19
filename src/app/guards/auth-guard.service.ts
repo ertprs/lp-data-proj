@@ -23,7 +23,7 @@ export class AuthGuardService implements CanActivate {
     }
 
     // navigate to login page
-    this._router.navigate(["/login"]);
+    this._router.navigateByUrl("/login");
     return false;
   }
 }

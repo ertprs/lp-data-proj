@@ -4,6 +4,19 @@ import { Label, Color } from "ng2-charts";
 import { GetDataService } from "../../services/get-data.service";
 import { Subscription } from "rxjs";
 
+let payload = {
+  interactive: true,
+  ended: true,
+  start: {
+    from: Date.now() - 60000 * 60 * 24 * 30,
+    to: Date.now()
+  }
+};
+let params = {
+  offset: 0,
+  limit: 50,
+  sort: "start:desc"
+};
 @Component({
   selector: "app-eng-hist",
   templateUrl: "./eng-hist.component.html",
@@ -12,19 +25,6 @@ import { Subscription } from "rxjs";
 export class EngHistComponent implements OnInit {
   data;
   subscription: Subscription;
-  params = {
-    offset: 0,
-    limit: 50,
-    sort: "start:desc"
-  };
-  payload = {
-    interactive: true,
-    ended: true,
-    start: {
-      from: Date.now() - 60000 * 60 * 24 * 30,
-      to: Date.now()
-    }
-  };
 
   public barChartOptions: ChartOptions = {
     title: {
@@ -78,10 +78,10 @@ export class EngHistComponent implements OnInit {
           responsive: true,
           type: "time",
           time: {
-            unit: "month",
-            unitStepSize: 3,
+            unit: "date",
+            unitStepSize: 5,
             displayFormats: {
-              quarter: "MMM DD"
+              day: 'MMM D'
             }
           },
           scaleLabel: {
@@ -91,7 +91,8 @@ export class EngHistComponent implements OnInit {
           distribution: "series",
           ticks: {
             autoSkip: true,
-            maxTicksLimit: 12
+            maxTicksLimit: 12,
+            source: "auto"
           }
         }
       ],
@@ -127,30 +128,27 @@ export class EngHistComponent implements OnInit {
   public lineChartPlugins = [];
 
   constructor(private dataService: GetDataService) {
-    this.dataService
-      .getEngHistoryData({ params: this.params, payload: this.payload })
-      .subscribe(
-        (response: any) => {
-          console.log(response);
-          let res = this.agentAverageScores(response);
-          this.data = response;
-          this.barChartData[0].data = res.mcsScores;
-          this.barChartData[1].data = res.convos;
-          this.barChartLabels = res.agents;
-          this.lineChartData = [
-            {
-              data: res.lineChartResults,
-              label: "mcs"
-            }
-          ];
-        },
-        err => `Observer received an error`
-      );
+    this.dataService.getEngHistoryData({ params, payload }).subscribe(
+      (response: any) => {
+        let res = this.agentAverageScores(response);
+        this.data = response;
+        this.barChartData[0].data = res.mcsScores;
+        this.barChartData[1].data = res.convos;
+        this.barChartLabels = res.agents;
+        this.lineChartData = [
+          {
+            data: res.lineChartResults,
+            label: "mcs"
+          }
+        ];
+      },
+      err => `Observer received an error`
+    );
   }
 
   ngOnInit() {
     this.dataService.currentEngHist.subscribe(data => {
-      console.log(data)
+      console.log(data);
       if (data.interactionHistoryRecords) {
         this.data = data;
         let res = this.agentAverageScores(data);
@@ -174,16 +172,16 @@ export class EngHistComponent implements OnInit {
     data.interactionHistoryRecords.forEach(set => {
       let date = new Date(set.info.startTime);
       lineChartResults.push({
-        x: date,
+        x: date.toUTCString(),
         y: set.info.chatMCS
       });
-      if (!result[set.info.agentFullName]) {
-        result[set.info.agentFullName] = {
+      if (!result[set.info.agentLoginName]) {
+        result[set.info.agentLoginName] = {
           chatMCS: set.info.chatMCS,
           count: 1
         };
       } else {
-        let agent = result[set.info.agentFullName];
+        let agent = result[set.info.agentLoginName];
         agent.chatMCS += set.info.chatMCS;
         agent.count += 1;
       }
@@ -201,5 +199,4 @@ export class EngHistComponent implements OnInit {
     }
     return allData;
   }
-
 }
