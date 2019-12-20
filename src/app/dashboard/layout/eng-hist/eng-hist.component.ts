@@ -149,7 +149,12 @@ export class EngHistComponent implements OnInit {
           }
         ];
       },
-      err => `Observer received an error`
+      err => {
+        if(isPlatformBrowser(this.platformId)) {
+          localStorage.setItem("bearer", "");
+          this.router.navigateByUrl("/login")
+        }
+      }
     );
   }
 

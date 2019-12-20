@@ -147,7 +147,12 @@ export class MsgIntHistComponent implements OnInit {
             Number(x)
           );
         },
-        err => `Observer received an error`
+        err => {
+          if(isPlatformBrowser(this.platformId)) {
+            localStorage.setItem("bearer", "");
+            this.router.navigateByUrl("/login")
+          }
+        }
       );
   }
 

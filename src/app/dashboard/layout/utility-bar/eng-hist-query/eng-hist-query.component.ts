@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, ViewChild } from "@angular/core";
 import { FormGroup, FormBuilder, Validator } from "@angular/forms";
 import { GetDataService } from "../../../services/get-data.service";
 import { eh_drop_down_select } from "../shared/drop-down-select";
@@ -12,6 +12,7 @@ import {
   eh_serializeParamForm
 } from "../utils/eh_serializationFns";
 import { Router } from "@angular/router";
+import { MatDrawer } from '@angular/material';
 
 @Component({
   selector: "app-eng-hist-query",
@@ -22,6 +23,7 @@ import { Router } from "@angular/router";
   ]
 })
 export class EngHistQueryComponent implements OnInit {
+  @ViewChild('drawer', {static: false}) public drawer: MatDrawer;
   @Input()
   time = eh_time;
   chainedValues = eh_chained_values;
@@ -146,6 +148,7 @@ export class EngHistQueryComponent implements OnInit {
               "The query was unsuccessful due to incorrect data or data type";
           }
           this.data = results;
+          this.drawer.close();
         },
         error => {
           this.errMess =

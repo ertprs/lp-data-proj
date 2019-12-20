@@ -7,7 +7,7 @@ export const mih_serializeQueryForm = (formValue) => {
         if (value.from) {
           // start, end, responseTime,
           if (typeof value.from == "object") {
-            if (!value.from.date || !value.to.date) {
+            if (!value.from.date || (value.to && !value.to.date)) {
               if (key == "start") {
                 serialized[key] = {
                   from: Date.now() - 60000 * 60 * 24 * 30,

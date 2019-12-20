@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, ViewChild } from "@angular/core";
 import { FormGroup, FormBuilder, Validator } from "@angular/forms";
 import { GetDataService } from "../../../services/get-data.service";
 import { mih_drop_down_select } from "../shared/drop-down-select";
@@ -15,6 +15,7 @@ import {
   mih_serializeQueryForm,
   mih_serializeParamForm
 } from "../utils/mih_serializationFns";
+import { MatDrawer } from '@angular/material';
 
 @Component({
   selector: "app-msg-int-query",
@@ -22,6 +23,7 @@ import {
   styleUrls: ["./msg-int-query.component.scss", "../utility-bar.component.scss"]
 })
 export class MsgIntQueryComponent implements OnInit {
+  @ViewChild('drawer', {static: false}) public drawer: MatDrawer;
   @Input()
   time = mih_time;
   chainedValues = mih_chained_values;
@@ -208,6 +210,7 @@ export class MsgIntQueryComponent implements OnInit {
               "The query was unsuccessful due to incorrect data or data type";
           }
           this.data = results;
+          this.drawer.close();
         },
         error => {
           this.errMess =
