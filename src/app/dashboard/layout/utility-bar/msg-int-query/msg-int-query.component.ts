@@ -209,8 +209,10 @@ export class MsgIntQueryComponent implements OnInit {
             this.errMess =
               "The query was unsuccessful due to incorrect data or data type";
           }
-          this.data = results;
-          this.drawer.close();
+          else {
+            this.data = results;
+            this.drawer.close();
+          }
         },
         error => {
           this.errMess =

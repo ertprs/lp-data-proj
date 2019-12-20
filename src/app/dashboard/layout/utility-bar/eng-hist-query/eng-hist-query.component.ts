@@ -146,9 +146,11 @@ export class EngHistQueryComponent implements OnInit {
           if (results.name && results.name == "Error") {
             this.errMess =
               "The query was unsuccessful due to incorrect data or data type";
+          } 
+          else {
+            this.data = results;
+            this.drawer.close();
           }
-          this.data = results;
-          this.drawer.close();
         },
         error => {
           this.errMess =
