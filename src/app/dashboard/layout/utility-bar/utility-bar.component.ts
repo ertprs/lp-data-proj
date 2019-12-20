@@ -19,7 +19,7 @@ export class UtilityBarComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem("bearer", "");
       localStorage.setItem("accountId", "");
-      this.router.navigate(["/home"]);
+      this.router.navigateByUrl("/home");
     }
   }
 }

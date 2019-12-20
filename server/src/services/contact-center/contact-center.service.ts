@@ -9,6 +9,7 @@ export class ContactCenterService {
   async getSkills(bearer: string, accountId: string) {
     let url = `https://va.ac.liveperson.net/api/account/${accountId}/configuration/le-users/skills`;
     let headers = generateHeaders(bearer);
+
     const skills = await this.http
       .get(url, { headers: headers })
       .pipe(map(response => response.data))
@@ -20,6 +21,7 @@ export class ContactCenterService {
   async getAgents(bearer: string, accountId: string) {
     let url = `https://va.ac.liveperson.net/api/account/${accountId}/configuration/le-users/users`;
     let headers = generateHeaders(bearer);
+
     const agents = await this.http
       .get(url, { headers: headers })
       .pipe(map(response => response.data))
@@ -31,6 +33,7 @@ export class ContactCenterService {
   async getAgentGroups(bearer: string, accountId: string) {
     let url = `https://va.ac.liveperson.net/api/account/${accountId}/configuration/le-users/agentGroups`;
     let headers = generateHeaders(bearer);
+
     const agentGroups = await this.http
       .get(url, { headers: headers })
       .pipe(map(response => response.data))

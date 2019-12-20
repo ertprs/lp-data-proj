@@ -1,11 +1,5 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  PLATFORM_ID,
-  Inject,
-} from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Component, OnInit, Input, PLATFORM_ID, Inject } from "@angular/core";
+import { Router } from "@angular/router";
 import { isPlatformBrowser } from "@angular/common";
 @Component({
   selector: "app-header",
@@ -18,39 +12,31 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: any,
-    private route: ActivatedRoute,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      let bearer = localStorage.getItem(
-        "bearer"
-      );
+      let bearer = localStorage.getItem("bearer");
       if (bearer) {
         this.loggedIn = true;
       } else {
         this.loggedIn = false;
       }
     }
-  }
 
-  //   ngAfterViewChecked() {
-  //     let bearer = sessionStorage.getItem("bearer")
-  //     if (bearer) {
-  //       this.loggedIn = true;
-  //     } else {
-  //       this.loggedIn = false;
-  //     }
-  // }
+    this.router.events.subscribe(res => {
+      if(this.router.url.indexOf('dashboard') > -1){
+        this.loggedIn = true;
+      } else {
+        this.loggedIn = false;
+      }
+    });
+  }
 
   logout() {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem("bearer", "");
-      localStorage.setItem(
-        "accountId",
-        ""
-      );
       this.loggedIn = false;
       this.router.navigate(["/home"]);
     }

@@ -26,28 +26,20 @@ export class GetDataService {
     payload;
   }): Observable<any> {
     let bearer;
-    let accountId;
 
-    if(isPlatformBrowser(this.platformId)){
+    if (isPlatformBrowser(this.platformId)) {
       bearer = localStorage.getItem("bearer");
-      accountId = localStorage.getItem("accountId")
     }
-    console.log(
-      "from data history service:",
-      JSON.stringify(accountId),
-      JSON.stringify(bearer)
-    );
-    
     return this.http
-      .post(
-        `${baseURL}api/data-history/engHistory/${accountId}/${bearer}`,
-        body
+      .post(`${baseURL}api/data-history/engHistory`, body, {
+        headers: { Authorization: `Bearer ${bearer}` }
+      })
+      .pipe(
+        map(response => {
+          this.engHistData.next(response);
+          return response;
+        })
       )
-      .pipe(map(response => {
-        this.engHistData.next(response);
-        console.log(response);
-        return response;
-      }))
       .pipe(catchError(this.processhttp.handleError));
   }
 
@@ -56,69 +48,55 @@ export class GetDataService {
     payload;
   }): Observable<any> {
     let bearer;
-    let accountId;
-    if(isPlatformBrowser(this.platformId)){
+    if (isPlatformBrowser(this.platformId)) {
       bearer = localStorage.getItem("bearer");
-      accountId = localStorage.getItem("accountId")
     }
-    console.log(
-      "from msg int history service:",
-      JSON.stringify(accountId),
-      JSON.stringify(bearer)
-    );
     return this.http
-      .post(
-        `${baseURL}api/data-history/msgIntHistory/${accountId}/${bearer}`,
-        body
+      .post(`${baseURL}api/data-history/msgIntHistory`, body, {
+        headers: { Authorization: `Bearer ${bearer}` }
+      })
+      .pipe(
+        map(response => {
+          this.msgIntHistData.next(response);
+          return response;
+        })
       )
-      .pipe(map(response => {
-        this.msgIntHistData.next(response);
-        console.log(response);
-        return response
-      }))
       .pipe(catchError(this.processhttp.handleError));
-      
   }
 
   public getSkills(): Observable<any> {
     let bearer;
-    let accountId;
-    if(isPlatformBrowser(this.platformId)){
+    if (isPlatformBrowser(this.platformId)) {
       bearer = localStorage.getItem("bearer");
-      accountId = localStorage.getItem("accountId")
     }
     return this.http
-      .get(
-        `${baseURL}api/contact-center/skills/${accountId}/${bearer}`
-      )
+      .get(`${baseURL}api/contact-center/skills`, {
+        headers: { Authorization: `Bearer ${bearer}` }
+      })
       .pipe(catchError(this.processhttp.handleError));
   }
 
   public getAgentGroups(): Observable<any> {
     let bearer;
-    let accountId;
-    if(isPlatformBrowser(this.platformId)){
+    if (isPlatformBrowser(this.platformId)) {
       bearer = localStorage.getItem("bearer");
-      accountId = localStorage.getItem("accountId")
     }
     return this.http
-      .get(
-        `${baseURL}api/contact-center/agentGroups/${accountId}/${bearer}`
-      )
+      .get(`${baseURL}api/contact-center/agentGroups`, {
+        headers: { Authorization: `Bearer ${bearer}` }
+      })
       .pipe(catchError(this.processhttp.handleError));
   }
 
   public getAgents(): Observable<any> {
     let bearer;
-    let accountId;
-    if(isPlatformBrowser(this.platformId)){
+    if (isPlatformBrowser(this.platformId)) {
       bearer = localStorage.getItem("bearer");
-      accountId = localStorage.getItem("accountId")
     }
     return this.http
-      .get(
-        `${baseURL}api/contact-center/agents/${accountId}/${bearer}`
-      )
+      .get(`${baseURL}api/contact-center/agents`, {
+        headers: { Authorization: `Bearer ${bearer}` }
+      })
       .pipe(catchError(this.processhttp.handleError));
   }
 }

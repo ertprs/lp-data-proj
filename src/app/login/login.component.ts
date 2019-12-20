@@ -1,4 +1,3 @@
-
 import { Component, OnInit, Inject, PLATFORM_ID, Input } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -92,10 +91,8 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.loginService.login(this.loginForm.value).subscribe(
       (bearer: any) => {
-        console.log(bearer);
         if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem("bearer", bearer.bearer);
-          localStorage.setItem("accountId", this.loginForm.value.account);
           this.loginForm.reset({
             account: "",
             username: "",

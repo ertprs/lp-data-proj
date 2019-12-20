@@ -1,18 +1,21 @@
-import { Controller, Post, Body, Param } from "@nestjs/common";
+import { Controller, Post, Body, Request, UseGuards } from "@nestjs/common";
 import { DataHistoryService } from "../../services/data-history/data-history.service";
 import { EngagementHistoryBody } from "../../models/engHistModel";
 import { MsgInteractionBody } from "../../models/msgIntHistModel";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller("data-history")
 export class DataHistoryController {
   constructor(private dataHistoryService: DataHistoryService) {}
 
-  @Post("engHistory/:accountId/:bearer")
+  @UseGuards(AuthGuard("jwt"))
+  @Post("engHistory")
   async getEngHistoryData(
-    @Param() params,
-    @Body() body: { params; payload: EngagementHistoryBody }
+    @Body() body: { params; payload: EngagementHistoryBody },
+    @Request() req
   ): Promise<any> {
-    const { bearer, accountId } = params;
+    // req.user comes after jwt validation in AuthGuard
+    const { bearer, accountId } = req.user;
     const response = await this.dataHistoryService.getEngHistory(
       bearer,
       accountId,
@@ -21,12 +24,14 @@ export class DataHistoryController {
     return response;
   }
 
-  @Post("msgIntHistory/:accountId/:bearer")
+  @UseGuards(AuthGuard("jwt"))
+  @Post("msgIntHistory")
   async getMsgInteractionsData(
-    @Param() params,
-    @Body() body: { params; payload: MsgInteractionBody }
+    @Body() body: { params; payload: MsgInteractionBody },
+    @Request() req
   ): Promise<any> {
-    const { bearer, accountId } = params;
+    // req.user comes after jwt validation in AuthGuard
+    const { bearer, accountId } = req.user;
     const response = await this.dataHistoryService.getMsgInteractions(
       bearer,
       accountId,

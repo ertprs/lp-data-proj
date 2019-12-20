@@ -3,7 +3,12 @@
   fxLayout="column"
   fxLayoutAlign="space-evenly center"
 >
-  <div fxFlex fxLayoutAlign="center center" class="loading-spinner" *ngIf="!data">
+  <div
+    fxFlex
+    fxLayoutAlign="center center"
+    class="loading-spinner"
+    *ngIf="!data"
+  >
     <mat-spinner></mat-spinner>
   </div>
   <canvas
@@ -21,9 +26,17 @@
     [plugins]="lineChartPlugins"
   >
   </canvas>
-  <div fxFlex fxLayoutAlign="center center" class="loading-spinner" *ngIf="!data">
-      <mat-spinner></mat-spinner>
-    </div>
+  <div
+    fxFlex
+    fxLayoutAlign="center center"
+    class="loading-spinner"
+    *ngIf="!data"
+  >
+    <mat-spinner></mat-spinner>
+  </div>
+  <br />
+  <br />
+  <br />
   <canvas
     baseChart
     width="1000"

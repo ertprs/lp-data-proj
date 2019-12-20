@@ -13,6 +13,10 @@ import { LoginService } from "./src/services/login/login.service";
 import { DataHistoryService } from "./src/services/data-history/data-history.service";
 import { ContactCenterService } from "./src/services/contact-center/contact-center.service";
 import { ContactCenterController } from "./src/controllers/contact-center/contact-center.controller";
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './src/services/login/jwt.strategy';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConstants } from './src/constants/jwt';
 @Module({
   imports: [
     AngularUniversalModule.forRoot({
@@ -25,7 +29,12 @@ import { ContactCenterController } from "./src/controllers/contact-center/contac
         ttl: 5
       })
     }),
-    HttpModule
+    HttpModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.register({
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '2hrs' },
+    }),
   ],
   controllers: [
     DataHistoryController,
@@ -39,7 +48,8 @@ import { ContactCenterController } from "./src/controllers/contact-center/contac
       useClass: CacheInterceptor
     },
     DataHistoryService,
-    ContactCenterService
+    ContactCenterService,
+    JwtStrategy
   ]
 })
 export class ApplicationModule {}

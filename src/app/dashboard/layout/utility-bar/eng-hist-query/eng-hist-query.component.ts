@@ -136,13 +136,11 @@ export class EngHistQueryComponent implements OnInit {
 
   onSubmit() {
     let payload_form = eh_serializeQueryForm(this.queryForm.value);
-    // console.log(`AFTER OPERATION ON FORM:`, payload_form);
     let params_form = eh_serializeParamForm(this.paramForm.value);
     this.dataService
       .getEngHistoryData({ params: params_form, payload: payload_form })
       .subscribe(
         (results: any) => {
-          console.log(results);
           if (results.name && results.name == "Error") {
             this.errMess =
               "The query was unsuccessful due to incorrect data or data type";
@@ -150,7 +148,6 @@ export class EngHistQueryComponent implements OnInit {
           this.data = results;
         },
         error => {
-          console.log(error);
           this.errMess =
             "The query was unsuccessful due to incorrect data or data type";
         }

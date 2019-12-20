@@ -1,9 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, PLATFORM_ID, Inject } from "@angular/core";
 import { ChartDataSets, ChartType } from "chart.js";
 import { Color, Label } from "ng2-charts";
 import { GetDataService } from "../../services/get-data.service";
 import * as moment from "moment";
 import { Subscription } from "rxjs";
+import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 
 let params = {
   offset: 0,
@@ -129,7 +131,7 @@ export class MsgIntHistComponent implements OnInit {
 
   public polarAreaChartType: ChartType = "polarArea";
 
-  constructor(private dataService: GetDataService) {
+  constructor(private dataService: GetDataService, @Inject(PLATFORM_ID) private platformId: any, private router: Router) {
     this.dataService
       .getMsgIntHistoryData({ params, payload })
       .subscribe(
@@ -151,7 +153,6 @@ export class MsgIntHistComponent implements OnInit {
 
   ngOnInit() {
     this.dataService.currentMsgInt.subscribe(data => {
-      console.log(data)
       if (data.conversationHistoryRecords) {
         this.data = data;
         let response = this.getMsgScoresByAgent(data);
@@ -171,12 +172,11 @@ export class MsgIntHistComponent implements OnInit {
     let lineResult = [];
     let len = 0;
     let polarResult = {};
-    console.log("get msg scores by agent: ", data);
     data.conversationHistoryRecords.forEach(set => {
       if (set.agentParticipants.length) {
         let setData = {
           data: [],
-          label: `${set.agentParticipants[0].agentFullName} at ${moment(
+          label: `${set.info.latestAgentLoginName} at ${moment(
             new Date(set.info.startTime)
           ).format("MM-DD-YYYY hh:MM a")}`
         };

@@ -1,9 +1,7 @@
 import {
   Injectable,
-  Inject,
   HttpService,
   CacheKey,
-  CACHE_MANAGER
 } from "@nestjs/common";
 import { map } from "rxjs/operators";
 import { generateHeaders } from "../../utils/generateHeaders";
@@ -14,8 +12,7 @@ import { MsgInteractionBody } from "../../models/msgIntHistModel";
 @CacheKey("accountId")
 export class DataHistoryService {
   constructor(
-    private http: HttpService,
-    @Inject(CACHE_MANAGER) private cacheManager
+    private http: HttpService
   ) {}
 
   async getEngHistory(
@@ -32,13 +29,7 @@ export class DataHistoryService {
   ): Promise<any> {
     let { payload, params } = body;
     let { sort, offset, limit } = params;
-
     const headers = generateHeaders(bearer);
-    console.log(
-      `FROM ENG HISTORY API: ${JSON.stringify(payload)}`,
-      headers,
-      params
-    );
     let url = `https://va.enghist.liveperson.net/interaction_history/api/account/${accountId}/interactions/search?offset=${
       offset ? offset : 0
     }&limit=${limit ? limit : 100}&sort=${sort ? sort : "start:desc"}`;
@@ -65,14 +56,7 @@ export class DataHistoryService {
   ): Promise<any> {
     let { payload, params } = body;
     let { sort, offset, limit } = params;
-
     const headers = generateHeaders(bearer);
-
-    console.log(
-      `FROM MSG INTERACTIONS API: ${JSON.stringify(payload)}`,
-      headers,
-      params
-    );
     let url = `https://va.msghist.liveperson.net/messaging_history/api/account/${accountId}/conversations/search?v=2&offset=${
       offset ? offset : 0
     }&limit=${limit ? limit : 100}&sort=${sort ? sort : "start:desc"}`;

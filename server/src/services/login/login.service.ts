@@ -1,10 +1,14 @@
 import { Injectable, HttpService } from "@nestjs/common";
 import { AxiosResponse } from "axios";
 import { map } from "rxjs/operators";
+import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class LoginService {
-  constructor(private http: HttpService) {}
+  constructor(
+    private http: HttpService,
+    private readonly jwtService: JwtService
+  ) {}
 
   login(credentials: {
     username: string;
@@ -23,11 +27,14 @@ export class LoginService {
       .post(url, { username, password }, headers)
       .pipe(
         map(response => {
-          console.log('From Login Service in Server: ', response.data.bearer);
           return response.data.bearer;
         })
       )
       .toPromise()
       .catch(err => err);
+  }
+
+  jwtSign(payload: { bearer: string; accountId: number }) {
+    return { access_token: this.jwtService.sign(payload) };
   }
 }

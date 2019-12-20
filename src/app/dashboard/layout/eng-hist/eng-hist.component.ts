@@ -1,8 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, PLATFORM_ID, Inject } from "@angular/core";
 import { ChartOptions, ChartType, ChartDataSets } from "chart.js";
 import { Label, Color } from "ng2-charts";
 import { GetDataService } from "../../services/get-data.service";
 import { Subscription } from "rxjs";
+import { isPlatformBrowser } from "@angular/common";
+import { Router } from "@angular/router";
 
 let params = {
   offset: 0,
@@ -82,7 +84,7 @@ export class EngHistComponent implements OnInit {
             unit: "date",
             unitStepSize: 5,
             displayFormats: {
-              day: 'MMM D'
+              day: "MMM D"
             }
           },
           scaleLabel: {
@@ -128,31 +130,31 @@ export class EngHistComponent implements OnInit {
   public lineChartType = "line";
   public lineChartPlugins = [];
 
-  constructor(private dataService: GetDataService) {
-    this.dataService
-      .getEngHistoryData({ params, payload })
-      .subscribe(
-        (response: any) => {
-          console.log(response);
-          let res = this.agentAverageScores(response);
-          this.data = response;
-          this.barChartData[0].data = res.mcsScores;
-          this.barChartData[1].data = res.convos;
-          this.barChartLabels = res.agents;
-          this.lineChartData = [
-            {
-              data: res.lineChartResults,
-              label: "mcs"
-            }
-          ];
-        },
-        err => `Observer received an error`
-      );
+  constructor(
+    private dataService: GetDataService,
+    @Inject(PLATFORM_ID) private platformId: any,
+    private router: Router
+  ) {
+    this.dataService.getEngHistoryData({ params, payload }).subscribe(
+      (response: any) => {
+        let res = this.agentAverageScores(response);
+        this.data = response;
+        this.barChartData[0].data = res.mcsScores;
+        this.barChartData[1].data = res.convos;
+        this.barChartLabels = res.agents;
+        this.lineChartData = [
+          {
+            data: res.lineChartResults,
+            label: "mcs"
+          }
+        ];
+      },
+      err => `Observer received an error`
+    );
   }
 
   ngOnInit() {
     this.dataService.currentEngHist.subscribe(data => {
-      console.log(data);
       if (data.interactionHistoryRecords) {
         this.data = data;
         let res = this.agentAverageScores(data);
@@ -165,14 +167,13 @@ export class EngHistComponent implements OnInit {
             label: "mcs"
           }
         ];
-      }
+      } 
     });
   }
 
   public agentAverageScores(data) {
     let result = {};
     let lineChartResults = [];
-    console.log("agent average scores: ", data);
     data.interactionHistoryRecords.forEach(set => {
       let date = new Date(set.info.startTime);
       lineChartResults.push({
