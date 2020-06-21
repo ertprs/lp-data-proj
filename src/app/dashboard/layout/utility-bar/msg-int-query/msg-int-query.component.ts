@@ -205,6 +205,7 @@ export class MsgIntQueryComponent implements OnInit {
       .getMsgIntHistoryData({ params: params_form, payload: payload_form })
       .subscribe(
         (results: any) => {
+          console.log(results)
           if (results.name && results.name == "Error") {
             this.errMess =
               "The query was unsuccessful due to incorrect data or data type";

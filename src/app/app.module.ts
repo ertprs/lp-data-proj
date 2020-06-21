@@ -21,7 +21,6 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { FooterComponent } from './footer/footer.component';
 
-// import 'hammerjs';
 import { LoginService } from './services/login.service';
 import { ProcessHttpmsgService } from './services/process-httpmsg.service';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
